@@ -1,0 +1,51 @@
+$.apa_results_table     Extract Parts of an APA Results Table
+apa6_pdf                APA manuscript (6th edition)
+apa_barplot             Bar Plots for Factorial Designs that Conform to
+                        APA Guidelines
+apa_beeplot             Bee-swarm Plots for Factorial Designs that
+                        Conform to APA Guidelines
+apa_factorial_plot      Plots for Factorial Designs that Conform to APA
+                        Guidelines
+apa_lineplot            Line Plots for Factorial Designs that Conform
+                        to APA Guidelines
+apa_prepare_doc         Prepare APA document (deprecated)
+apa_print               Typeset Statistical Results
+apa_print.aov           Typeset Statistical Results from ANOVA
+apa_print.emmGrid       Typeset Statistical Results from Estimated
+                        Marginal Means
+apa_print.glht          Typeset Statistical Results from General Linear
+                        Hypothesis Tests
+apa_print.glm           Typeset Statistical Results from GLM
+apa_print.htest         Typeset Statistical Results from Hypothesis
+                        Tests
+apa_print.list          Typeset Statistical Results from Linear-Model
+                        Comparisons
+apa_print.lme           Typeset Statistical Results from Nonlinear
+                        Hierarchical Models
+apa_print.merMod        Typeset Statistical Results from Hierarchical
+                        GLM
+apa_print.papaja_wsci   Typeset Within-Subjects Confidence Intervals
+apa_table               Prepare Table for Printing and Reporting
+cite_r                  Cite R and R Packages
+conf_int                Between-Subjects Confidence Intervals
+fetch_web_refs          Fetch a .bib-reference file from the web
+                        (defunct)
+fetch_zotero_refs       Save a collection from a Zotero-Account to a
+                        BibTeX-file (defunct)
+glue_apa_results        Create a New 'apa_results' Object
+hd_int                  Highest-Density Intervals
+in_paren                Replace Parentheses with Brackets
+papaja                  Prepare APA Journal Articles with R Markdown
+printnum                Typeset Numerical Values for Printing and
+                        Reporting
+printp                  Prepare Numeric Values for Printing as p value
+quote_from_tex          Quote from TeX document
+r_refs                  Create a Reference File for R and R Packages
+remove_comments         Remove Comments
+revision_letter_pdf     Revision Letter
+se                      Standard Error of the Mean
+simple_codebook         Simple Codebook
+summary.papaja_wsci     Summarize Within-Subjects Confidence Intervals
+theme_apa               APA-style 'ggplot2' Theme
+typeset_scientific      Typeset scientific notation
+wsci                    Within-Subjects Confidence Intervals
