@@ -14,4 +14,4 @@ In order to take this course, first navigate to the folder where you want the co
 
 `git clone https://github.com/alex-strobel/R-Markdown.git` 
 
-Now open [01_Lessons/RM_01_GettingStarted.Rmd](01_Lessons/RM_01_GettingStarted.Rmd) and ... ahm ... get started!
+In RStudio, open activateCourse.R and follow the instructions (please note that to setup your environment may take a few minutes). Then open 01_Lessons/RM_01_GettingStarted.Rmd for ... ahm ... getting started!
