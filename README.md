@@ -11,8 +11,7 @@ activateCourse.R               - R script for activating the course via renv or 
 
 ## How to use this repository
 In order to take this course, first navigate to the folder where you want the course to be stored and RMarkdwon files to be executed. Then clone this repository from the RStudio console via the following command:
-```
-git clone https://github.com/alex-strobel/R-Markdown.git
 
-```
+`git clone https://github.com/alex-strobel/R-Markdown.git` 
+
 Now open [01_Lessons/RM_01_GettingStarted.Rmd](01_Lessons/RM_01_GettingStarted.Rmd) and ... ahm ... get started!
