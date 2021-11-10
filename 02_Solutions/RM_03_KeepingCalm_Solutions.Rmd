@@ -1,0 +1,315 @@
+---
+title: "R Markdown Lesson 03: Keeping Calm"
+author: "Alexander Strobel & Christoph Scheffel"
+subtitle: 'Solutions to the exercises'
+output:
+  pdf_document:
+  keep_tex: true
+bibliography: lesson03_solution.bib
+csl: apa7.csl
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+
+# required package(s)
+library(psych)      # mainly for correlation analysis
+library(robustbase) # mainly for robust regression
+
+# required functions
+
+# if possible, rather than sourcing often used functions via 'source()', embed 
+# them via copy/paste to ensure that the functions are available right away, 
+# which is especially helpful when you share your code along with your data  
+
+# returning coefficients in APA style
+apa.coef <- function(coef, gt1 = T, digits = 2, pval = F) { 
+  if (gt1 == T) {
+    coef = format(round(coef, digits = digits), nsmall = digits)
+  } else if (gt1 == F) {
+    coef = sub('0.', '.', format(round(coef, digits = digits), nsmall = digits))
+  }
+  if (pval == T) {
+    if (coef == '.000') {
+      coef = '< .001'
+    } else {
+      coef = paste('=', coef)
+    }
+  }
+  return(coef)
+}
+
+# reporting correlations in APA-style (simple version)
+apa.cor <- function(df, method = 'pearson') { 
+  ct = corr.test(df)$ci
+  r.ci = sub('0.', '.', format(round(ct[1, 1:3], digits = 2), nsmall = 2))
+  pval = sub('0.', '.', format(round(ct[1, 4], digits = 3), nsmall = 3))
+  if (pval == '.000') {
+    pval = '< .001'
+  } else {
+    pval = paste('=', pval)
+  }
+  out = paste0('_r_ = ', r.ci[2], ', 95% CI [', r.ci[1], ', ', r.ci[3], '], _p_ ', pval)
+  return(out)
+}
+
+# function for extracting and formatting correlation information for use in manuscript, i.e.,
+# effect size classification according to Hemphill (2003) or Cohen (1988) and correlation
+# coefficients (Pearson or Spearman) together with their 95% CI 
+apa_print.corr.test <- function(df, method = "pearson", classify = "gignac") {
+  ci = corr.test(df, method = method)$ci
+  out = NULL
+  for (i in 1:nrow(ci)) {
+    if (classify == "gignac") {
+      if (ci$r[i] < .2) {
+        es = "small"
+      } else if (ci$r[i] >= .2 & ci$r[i] <= .3) {
+        es = "medium"
+      } else {
+        es = "large"
+      }
+    } else if (classify == "cohen") {
+      if (ci$r[i] < .3) {
+        es = "small"
+      } else if (ci$r[i] >= .5 & ci$r[i] <= .5) {
+        es = "medium"
+      } else {
+        es = "large"
+      }
+    }
+    r = sub("[0]+", "", format(round(ci$r[i], 2), nsmall = 2))
+    # format p-value
+    if (ci$p[i] > .001) {
+      p = paste("_p_ = ", sub("[0]+", "", format(round(ci$p[i], 3), nsmall = 3)), sep = "")
+    } else {
+      p = "_p_ < .001"
+    }
+    # format ci
+    CI = sub("[0]+", "", format(round(c(ci$lower[i], ci$upper[i]), 2), nsmall = 2))
+    CI = paste("95% CI [", CI[1], ", ", CI[2], "]", sep = "")
+    if (method == "pearson") {
+      summary = paste("_r_ = ", r, ", ", CI, sep = "")
+      full.summary = paste("_r_ = ", r, ", ", CI, ", ", p, sep = "")
+    } else if (method == "spearman") {
+      summary = paste("_r~s~_ = ", r, ", ", CI, sep = "")
+      full.summary = paste("_r~s~_ = ", r, ", ", CI, ", ", p, sep = "")
+    }
+    out = rbind(out, c(es, summary, full.summary))
+  }
+  colnames(out) = c("es", "rs", "rsp")
+  rownames(out) = sub("-", ".", rownames(ci))
+  return(as.data.frame(out))
+}
+
+# function for normalizing data 
+normalize.gen <- function(data, whichFormula = 2, whichMeanSD = 1) {
+  # normalizes data using one of the formulae:
+  #
+  # 1 = Van der Waerden (1952): r * / (n + 1)
+  # 2 = Blom (1954):           (r - 3/8) / (n + 1/4) (default)
+  # 3 = Bliss (1956; Rankit):  (r - 1/2) / n
+  # 4 = Tukey (1962):          (r - 1/3) / (n + 1/3)
+  #
+  # Ties will be treated as average, and the output will be rescaled
+  # to have mean = 0 and sd = 1, if you enter 1 for whichMeanSD (default);
+  # if you want to keep the mean and sd of the original variable, enter 0.
+  
+  normalize = function(data, normalize.formula = whichFormula, mean0.sd1 = whichMeanSD) {
+    r = rank(data, na.last = "keep", ties.method = ("average"))
+    n = sum(!is.na(r))
+    
+    if (normalize.formula == 1)
+      x = r / (n + 1)
+    if (normalize.formula == 2)
+      x = (r - 3 / 8) / (n + 1 / 4)
+    if (normalize.formula == 3)
+      x = (r - 1 / 2) / n
+    if (normalize.formula == 4)
+      x = (r - 1 / 3) / (n + 1 / 3)
+    
+    if (mean0.sd1 == 1)
+      normal = qnorm(x, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)
+    else
+      normal = qnorm(x, mean = mean(data,na.rm = T), sd = sd(data,na.rm = T), lower.tail = TRUE, log.p = FALSE)
+  }
+  
+  if (class(data) == "numeric") { 
+    normal = normalize(data, whichFormula, whichMeanSD)
+  } else {
+    normal = NULL
+    for (i in 1:dim(data)[2]) {
+      normal = cbind(normal, normalize(data[,i], whichFormula, whichMeanSD))
+    }
+    colnames(normal) = names(data)
+  }
+  
+  return(as.data.frame(normal))
+  
+}
+
+# function for applying shapiro.test to all cols of a df
+sw <- function(df) { 
+  out = NULL
+  for (i in 1:ncol(df)) {
+    out = c(out, shapiro.test(df[,i])$p.value)
+  }
+  return(out)
+}
+
+```
+
+# Solutions to the exercises of Lesson 02
+
+## First exercise
+
+Here, you were to inspect the associated BibTeX file (lesson03.bib) to familiarize yourself with the format and then write new entries for the following two references and cite them in the text:
+
+* Cohen, J. (1988). _Statistical power analysis for the behavioral sciences._ Hillsdale: Erlbaum.
+* Hemphill, J. F. (2003). Interpreting the magnitudes of correlation coefficients. _American Psychologist, 58_(1), 78–80.
+
+In your text editor, these references should look like the entries below (for the knitted document; see also last two entries in the new BibTeX file associated with this document, i.e. lesson03_solution.bib):
+
+\begin{quote}
+\begin{tabbing}
+@Book\{Cohen1988,\\
+\hspace{1em} \= author = \{J. Cohen\},\\
+\hspace{1em} \= title = \{Statistical power analysis for the behavioral sciences\},\\
+\hspace{1em} \= year = \{1988\},\\
+\hspace{1em} \= address = \{Hillsdale\},\\
+\hspace{1em} \= publisher = \{Erlbaum\},\\
+\}\\
+@Article\{Hemphill2003,\\
+\hspace{1em} \= author = \{J. F. Hemphill\},\\
+\hspace{1em} \= title = \{Interpreting the magnitudes of correlation coefficients\},\\
+\hspace{1em} \= journal = \{American Psychologist\},\\
+\hspace{1em} \= year = \{2003\},\\
+\hspace{1em} \= volume = \{58\},\\
+\hspace{1em} \= issue = \{1\},\\
+\hspace{1em} \= pages = \{78-80\},\\
+\hspace{1em} \= doi = \{10.1037/0003-066X.58.1.78\},\\
+\}
+\end{tabbing}
+\end{quote}
+
+To cite them in the text, you could write something like: "There have been suggestions to use discipline-specific, empirically informed effect size guidelines [e.g., @Gignac2016;@Hemphill2003], instead of the rather generic suggestions made by @Cohen1988."  
+
+If you are currently staring on the rather cumbersome RMarkdown/LaTeX code instead of the clean knitted PDF output, you might ask yourself whether it is worth the time you need to spent to format your text in LaTeX, given that it would probably take you much less time to do so in Word. This is a valid argument, but if you want to have a dynamically updateable manuscript, Word won't let you do this. Also, Word is very stubborn when it comes to positioning a figure or table (including legends and notes) exactly at the top or bottom of a page. You may ask why one want to do this, but take a look at journal articles: if it's not a single column figure or table, it is always or at least mostly positioned like that. Let us exercise this!
+   
+## Second exercise
+
+Your task was to slightly modify the analysis routine for the correlation analysis to compare the results of the appropriate correlation method defined in the analysis script with the alternative method, i.e., Spearman vs. Pearson correlations. You also were to provide a table exactly at the top of the page giving the results of one method above the diagonal and the results of the alternative method below the diagonal(and the alphas in the diagonal).
+
+```{r exercise.2}
+# set seed for reproducible results
+set.seed(1)
+
+# simulate data
+n = 256
+X = rnorm(n)
+Y = .2*X + rnorm(n)
+Z = .2*X + .2*Y + rnorm(n)
+
+outliers = sort(sample(1:256, 4, replace = F))
+Y[outliers] = runif(4, 3.75, 4.25)
+Z[outliers] = runif(4, 3.75, 4.25)
+
+df = data.frame(X, Y, Z)
+
+# get descriptives
+descriptives = describe(df)[, c(3:5, 13, 8:9, 11:12)] # drop some unnecessary output and rearrange cols
+
+# add results from shapiro.tests
+descriptives$shapiro.p = sw(df)
+
+# add (arbitrary) alphas
+descriptives$alpha = c(.82, .76, .79)
+
+# determine whether and which variables deviate from univariate normality and enclose the into $$ for LaTeX output
+which.normal = paste('$', rownames(descriptives)[which(descriptives$shapiro.p > .2)], '$', sep = '')
+which.nonnormal = paste('$', rownames(descriptives)[which(descriptives$shapiro.p < .2)], '$', sep = '')
+
+# determine whether there are one or two normally, or non-normally, resp., distributed variables 
+report.normal = report.nonnormal = 'variable'
+
+if (length(which.normal) > 1) {
+  which.normal  = paste(which.normal, collapse = " and ")
+  report.normal = 'variables'
+}
+if (length(which.nonnormal) > 1) {
+  which.nonnormal  = paste(which.nonnormal, collapse = " and ")
+  report.nonnormal = 'variables'
+}
+
+# assess multivariate normality
+
+mardia.df = mardia(df, plot = F)
+# generate text elements to report test results
+if (mardia.df$p.skew > .2 | mardia.df$p.kurt > .2) {
+  report.mardia = 'no'
+} else {
+  report.mardia = 'a'
+}
+
+# determine whether standard of robust tests are to be performed
+if (any(descriptives$shapiro.p < .2) | mardia.df$p.skew < .2 | mardia.df$p.kurt < .2 ) {
+  distribution = 'non-normal'
+  correlation = 'Spearman'
+  alternative = 'Pearson'
+  cap.1 = 'Correlations of the variables of interest with their 95% confidence intervals. Spearman correlations printed in black, Pearson correlations printed in grey.' 
+} else {
+  distribution = 'normal'
+  correlation = 'Pearson'
+  alternative = 'Spearman'
+  cap.1 = 'Correlations of the variables of interest with their 95% confidence intervals. Pearson correlations printed in black, Spearman correlations printed in grey.'
+}
+
+ct1 = corr.test(df, method = tolower(correlation))
+ct2 = corr.test(df, method = tolower(alternative))
+
+```
+
+The Results section would the read like this: "Shapiro-Wilk tests for deviation from univariate normality showed that `r report.normal` `r which.normal` did not deviate from the normal distribution, $p>.2$, while `r report.nonnormal` `r which.nonnormal` deviated from the normal distribution, $p<.2$. Furthermore, a Mardia test for multivariate normality indicated that there was `r report.mardia` deviation from the multivariate normal distribution, $p_{skew}$ `r apa.coef(mardia.df$p.skew, gt1 = F, digits = 3, pval = T)`, $p_{kurtosis}$ `r apa.coef(mardia.df$p.kurt, gt1 = F, digits = 3, pval = T)`. Given the overall `r distribution` distribution of the data, we computed `r correlation` correlations regression to test our hypotheses, see Table 1. For comparison, we also provide the results of `r alternative` correlations."
+
+\begin{table}[t!]
+\begin{center}
+\caption{Correlations of the variables of interest}
+\vspace{0.25cm}
+
+\begin{tabular}{ l c c c }
+  \hline
+   & X & Y & Z \\ 
+  \hline
+   X & \textit{`r apa.coef(descriptives$alpha[1], gt1 = F)`} & `r apa.coef(ct1$r[1, 2], gt1 = F, digits = 2)` & `r apa.coef(ct1$r[1, 3], gt1 = F, digits = 2)` \\
+   Y & `r apa.coef(ct2$r[2, 1], gt1 = F, digits = 2)` & \textit{`r apa.coef(descriptives$alpha[2], gt1 = F)`} & `r apa.coef(ct1$r[2, 3], gt1 = F, digits = 2)` \\
+   Z & `r apa.coef(ct2$r[3, 1], gt1 = F, digits = 2)` & `r apa.coef(ct2$r[3, 2], gt1 = F, digits = 2)` & \textit{`r apa.coef(descriptives$alpha[3], gt1 = F)`} \\
+  \hline  
+\end{tabular}
+\vspace{0.25cm}
+
+\textit{Note.} $N=$ `r n`. Coefficients above the diagonal are based `r correlation` correlations, coefficients below the diagonal are `r alternative` correlations. Coefficients in the diagonal are Cronbach's $\alpha$.
+\end{center}
+\end{table}
+
+Another challenge now would be to add asterisks to coefficients in the table that denote the level of significance of the coefficients, i.e., * $p<.05$, ** $p<.01$, and *** $p<.001$.
+
+
+## Third exercise
+
+In this exercise, you were to provide a figure with the 95% confidence intervals of the correlations you obtained, for both Spearman and Pearson correlations. Depending on which method is indicated by the tests of normality, Spearman correlations should be printed in black and Pearson correlations in grey (or vice versa).
+
+```{r exercise.3, fig.height  =3.5, fig.width = 3.5, fig.cap = cap.1, fig.pos = 'b!'}
+x.max = abs(max(rbind(ct1$ci[, c(1, 3)], ct2$ci[, c(1, 3)])))
+par(mgp = c(2, .5, 0), cex.axis = .8, cex.lab = .8, tck = -.03)
+plot(c(-x.max, x.max), c(1, 3), type = "n", ylim = c(.5, 3.5), xlab = 'Correlations with 95% CI', ylab = "", yaxt = "n")
+axis(2, at = 1:3, rownames(ct1$ci), las = 1)
+abline(v = 0, lty = 3)
+matlines(t(ct1$ci[, c(1, 3)]), t(matrix(rep(1:3 + .15, 2), ncol = 2)), lty = 1, lwd = 1.25, col = 1)
+points(ct1$ci[, 2], 1:3 + .15, pch = 19, cex = 1.25)
+matlines(t(ct2$ci[, c(1, 3)]), t(matrix(rep(1:3 - .15, 2), ncol = 2)), lty = 1, lwd = 1.25, col = grey(.5)
+)
+points(ct2$ci[, 2], 1:3 - .15,  pch = 19, cex = 1.25, col = grey(.5))
+```
+
+
+# References

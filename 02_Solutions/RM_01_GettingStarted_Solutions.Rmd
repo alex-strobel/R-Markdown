@@ -1,0 +1,107 @@
+---
+title: 'R Markdown Lesson 01: Getting Started'
+subtitle: 'Solutions to the exercises'
+author: "Alexander Strobel & Christoph Scheffel"
+output: word_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Solutions to the exercises of Lesson 01
+
+## First exercise
+
+Your task was to set up an R Markdown file with Word output and insert a subtitle in the YAML header. The solution to this task can be seen above in the header of this document.
+
+## Second exercise
+
+Here, you should try to write 'partial eta-squared' using LaTeX code. This is done via "\\eta_{p}^2" embedded double Dollar symbols, which is then formatted as $\eta_{p}^2$.
+
+## Third exercise
+
+Your task was to use the variables $x$ and $y$ generated in Lesson 01 to run a simple linear regression in a code chunk and report the results in the body of the document including multiple $R$-squared and the $F$-statistic. The  code chunk below (invisible in the knitted document) shows how this could be done. The resulting texts reads:
+
+```{r cor1, echo = F}
+set.seed(242)       # set custom seed for reproducible results
+x = rnorm(100)        # generate random normally distributed variable x with 100 observations
+y = 0.2 * x + rnorm(100)  # generate random normally distributed variable y with 100 observations that covaries with x
+
+apa.coef <- function(coef, gt1 = T, digits = 2) {
+    # function for reporting results according to APA conventions
+    if (gt1 == T) {
+      coef = format(coef, digits = 2, nsmall = 2)
+    } else if (gt1 == F) {
+      coef = sub('0.', '.', format(coef, digits = digits, nsmall = digits))
+    }
+    return(coef)
+  }
+
+slm = summary(lm(y ~ x)) # summary of linear regression model
+# slope for reporting
+slope  = apa.coef(slm$coefficients[2, 1])
+# standard error for reporting
+SE     = apa.coef(slm$coefficients[2, 2])
+# t-value for reporting
+tval   = apa.coef(slm$coefficients[2, 3])
+# p-value for reporting, either for >= .001 or for < .001
+if (slm$coefficients[2, 4] >= .001) {
+  pval = paste0("= ", apa.coef(slm$coefficients[2, 4], gt1 = F, digits = 3))
+} else {
+  pval = "< .001"
+}
+# classification of p-value
+if (slm$coefficients[2, 4] < .05) {
+  psig = "significantly"
+} else {
+  psig = "nonsignificantly"
+}
+# adjusted R-square for reporting
+rsq    = apa.coef(slm$r.squared, gt1 = F, digits = 2)
+```
+
+Variable $x$ `r psig` predicted variable $y$ in a linear regression model, $B=$ `r slope`, $SE=$ `r SE`, $t=$ `r tval`, $p$ `r pval`. The explained variance of the model was $R^2=$ `r rsq`.
+
+## Fourth execise
+
+You should write a function that reports the means and standard deviations of $x$ and $y$, either without or with a statement on whether the variables were normally distributed (as determined via a Shapiro-Wilk test, with $p>.20$ indicating no deviation from the normal distribution). This code chunk below (invisible in the knitted document) shows an option. 
+
+```{r descriptives, echo = F}
+descriptives <- function(variable, normality.test = T) {
+  M = mean(variable)
+  SD = sd(variable)
+  if (normality.test == T) {
+    SW.p = shapiro.test(variable)$p
+    if (SW.p > .20) {
+      normal = "normally"
+    } else {
+      normal = "non-normally"
+    }
+  } else {
+    SW.p = NULL
+    normal = ""
+  }
+  return(list(mean = M, sd = SD, normal = normal, p.normal = SW.p
+  ))
+}
+
+```
+
+You can then use this function to report descriptve statistics: Variable $x$ ($M=$ `r round(descriptives(x)$mean, 2)`, $SD=$ `r round(descriptives(x)$sd, 2)`) was `r descriptives(x)$normal` distributed, Shapiro-Wilk-test, $p=$  `r sub('0.', '.', format(descriptives(x)$p.normal, digits = 3, nsmall = 3))`. For this very purpose (i.e., to give means and standard deviations, you of course do not need a special function), you can simply write: Variable $x$ had a mean of $M=$ `r round(mean(x),2)`. But if you want to have certain text to be inserted to state whether or not some result is significant or not or some distribution is normal or non-normal, such a function makes this an easier job.   
+
+## Fifth exercise
+
+The task was to insert a figure of a scatter plot of the regression of $y$ on $x$ including confidence intervals of the regression slope using the _predict()_ function and also to set the figure caption in the code chunk using the argument fig.cap. Here is, how this could be done.
+
+```{r figure, echo = F, fig.height = 3.5, fig.width = 3.5, fig.align = 'center', fig.cap = "__Figure 1.__ Scatterplot of the variables of interest. "}
+plot(x, y, xlim = c(-3, 3), ylim = c(-3, 3), cex = .6, cex.axis = .8, las = 1) # change las to 0 and see what happens to the plot
+abline(lm(y ~ x), lwd = 1.5)
+text(2.5, -2.5, bquote(italic(r) == .(round(cor(x, y), 2))), cex = .8)
+newx = seq(par('usr')[1], par('usr')[2], by = .01)
+p = predict(lm(y ~ x), data.frame(x = newx), interval = 'confidence')
+lines(newx, p[, 2], lty = 5)
+lines(newx, p[, 3], lty = 5)
+```
+
+You may notice two things: First, the resolution of the figure is very bad, and it has large white margins. Second, although in the header of the code chunk, it is stated "fig.align='center'", the figure is placed left. Both things have to do with the Word output. Change the output format in the YAML header at the beginning of this document to "pdf_document" and see what happens, when you knit the document again.

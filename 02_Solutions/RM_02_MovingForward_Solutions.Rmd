@@ -1,0 +1,124 @@
+---
+title: "RMarkdown Lesson 02: Moving Forward"
+subtitle: 'Solutions to the exercises'
+author: "Alexander Strobel & Christoph Scheffel"
+output: pdf_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Solutions to the exercises of Lesson 02
+
+## First exercise
+
+Your task was to set up an R Markdown file with a title page conforming to APA standard. On the following page, you will see how this could look like (see LaTeX code at the end of this RMarkdown document).
+
+## Second exercise
+
+Your task was to adapt the first paragraph of the section *Definition and features* of the *Wikipedia* entry on the $t$-statistic (<https://en.wikipedia.org/wiki/T-statistic>) using RMarkdown and LaTeX. To solve the task, you would first simply copy and paste the text from the resource. You will notice that this inserts LaTeX text elements that you will need to enclose in \$...\$. Also, $\beta$ will be displayed as greek letter in your RMarkdown text, but will give you an error message when knitting the document, so you need to replace any greek beta with the respective LaTeX code for this letter.
+
+```{=tex}
+\begin{quote}
+
+Let ${\displaystyle \scriptstyle {\widehat {\beta }}}$ be an estimator of parameter $\beta$ in some statistical model. Then a $t$-statistic for this parameter is any quantity of the form
+
+\vspace{0.25cm}
+
+${\displaystyle t_{\widehat {\beta }}={\frac {{\widehat {\beta }}-\beta _{0}}{\operatorname {s.e.} ({\widehat {\beta }})}}}$
+
+\vspace{0.25cm}
+
+where $\beta_{0}$ is a non-random, known constant which may or may not match the actual unknown parameter value $\beta$, and ${\displaystyle \operatorname {s.e.} ({\widehat {\beta }})}$ is the standard error of the estimator ${\displaystyle \scriptstyle {\widehat {\beta }}}$ for $\beta$.
+
+\end{quote}
+```
+## Third exercise
+
+Here, you were required to modify the function *apa.coef()* of the respective document in a way that it returns $<.001$ in case a $p$-value is lower than .001. Here's the original function again (invisible).
+
+```{r apa_original, echo = F}
+# required package
+library(psych)
+
+# required function
+apa.coef <- function(coef, gt1 = T, digits = 2) { # function for reporting results according to APA conventions
+  if (gt1 == T) {
+    coef = format(round(coef, digits = digits), nsmall = digits)
+  } else if (gt1 == F) {
+    coef = sub('0.', '.', format(round(coef, digits = digits), nsmall = digits))
+  }
+  return(coef)
+}
+
+
+
+```
+
+If you use this function for say correlation coefficients, you would write: The variables correlated with $r=$ `r apa.coef(.41,gt1=F)`, but if you would want to add a $p$-value, it would look like this: The variables correlated with $r=$ `r apa.coef(.41,gt1=F)`, $p=$ `r apa.coef(.000000001,gt1=F,digits=3)`. To have a handy function that reports formally correct $p$-values, a modified function could look like this (again invisible in the document).
+
+```{r apa_modified, echo=F}
+
+apa.coef <- function(coef, gt1 = T, digits = 2, pval = F) {
+  if (gt1 == T) {
+    coef = format(round(coef, digits = digits), nsmall = digits)
+  } else if (gt1 == F) {
+    coef = sub('0.', '.', format(round(coef, digits = digits), nsmall = digits))
+  }
+  if (pval == T) {
+    if (coef == '.000') {
+      coef = '< .001'
+    } else {
+      coef = paste('=', coef)
+    }
+  }
+  return(coef)
+}
+
+```
+
+With his modification, you can now write: The variables were correlated with $r=$ `r apa.coef(.41,gt1=F)`, $p$ `r apa.coef(.000000001,gt1=F,pval=T,digits=3)`. You may also want to have a dedicated function that reports the results of correlation analyses. This function could look like this (again invisible).
+
+```{r apa_cor, echo=F}
+
+apa.cor <- function(df, method = 'pearson') {
+  ct = corr.test(df)$ci
+  r.ci = sub('0.', '.', format(round(ct[1, 1:3], digits = 2), nsmall = 2))
+  pval = sub('0.', '.', format(round(ct[1, 4], digits = 3), nsmall = 3))
+  if (pval == '.000') {
+    pval = '< .001'
+  } else {
+    pval = paste('=', pval)
+  }
+  out = paste0('_r_ = ', r.ci[2], ', 95% CI [', r.ci[1], ', ', r.ci[3], '], _p_ ', pval)
+  return(out)
+}
+
+# random variables for demonstration purposes
+set.seed(242)
+x = rnorm(200)
+y = .6 * x + rnorm(200)
+df = data.frame(x, y)
+ct = corr.test(df)
+
+```
+
+The output of this function would look like this: The variables were correlated with `r apa.cor(df)`.
+
+```{=tex}
+\newpage
+\vspace*{2.5cm}
+```
+```{=tex}
+\begin{center}
+An RMarkdown Document in APA-Style
+
+Alexander Strobel and Christoph Scheffel
+
+\vspace*{15cm}
+Author Note
+\end{center}
+\indent{Faculty of Psychology, Technische Universität Dresden, 01062 Dresden, Germany; Philipp C. Paulus, Max Planck Institute for Cognitive and Brain Sciences Leipzig, Stephanstraße 1a, 04103 Leipzig, Germany. * These authors contributed equally to this work. We are indebted to Fanny Weber-Göricke, Technische Universität Dresden, for assistance in data aqcisition management. This work was funded by the German Research Foundation (Deutsche Forschungsgemeinschaft, DFG; SFB 940/2).}
+```
+<!-- klappt nicht so, wie ich das will, erstens ist es nicht zweizeilig, zweitens kein Einzug 1. Zeile bei der Author Note, 3. kein Running Head inkl. Seitenzahl in der Kopfzeile; in LaTeX allein bekomme ich das (mit Hilfe von Overleaf)  hin, aber wenn ich den Overleaf Code in eine Preamble.tex packe und im YAML Header laden lasse, kommt ein Fehler (es seien zwei documentclasses bzw. -styles definiert) -->
