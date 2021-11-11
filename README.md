@@ -21,7 +21,7 @@ In this course, you will learn how to use R Markdown for that purpose. We provid
 
 In order to take this course, first navigate to the folder where you want the course to be stored and R Markdown files to be executed. Then clone this repository from the RStudio console via the following command:
 
-`git clone https://github.com/alex-strobel/R-Markdown.git` 
+`git clone https://github.com/alex-strobel/R-Markdown.git` (Mac OS) 
 
 In RStudio, open activateCourse.R and follow the instructions (please note that to setup your environment may take a few minutes). Then open 01_Lessons/RM_01_GettingStarted.Rmd for ... ahm ... getting started!
 
