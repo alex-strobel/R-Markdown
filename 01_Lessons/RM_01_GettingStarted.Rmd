@@ -10,7 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. In the following, I will briefly give a general outline of R Markdown, which is an easy to learn language for creating updateable and reproducible reports. In RStudio (RStudio Team, 2016), you first create a new file of format R Markdown, define some document-specific issues such as the title, author or the output format in the so-called YAML header, and then simply start writing! Formatting is quite straightforward. Some examples for formatting text are:
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. 
+In the following, I will briefly give a general outline of R Markdown, which is an easy to learn language for creating updateable and reproducible reports. 
+In RStudio (RStudio Team, 2016), you first create a new file of format R Markdown, define some document-specific issues such as the title, author or the output format in the so-called YAML header, and then simply start writing! 
+Formatting is quite straightforward. 
+Some examples for formatting text are:
 
 > # Heading 1
 >
