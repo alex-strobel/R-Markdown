@@ -8,8 +8,10 @@
 # working properly, edit the path below to match the directory you cloned the 
 # R-Markdown repository in
 
-# Change to project directory
-setwd("/Users/alex/Documents/GitHub/R-Markdown")
+# Change to project directory via here package
+library (here) 
+# set top level directory to source file
+here::i_am("flag_project_root_RMDcourse.txt")
 
 # Detach other packages if there are any to avoid conflicts with packages of 
 # the R environment of this project
