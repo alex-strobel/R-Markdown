@@ -16,10 +16,12 @@ knitr::opts_chunk$set(echo = F)
 ## Preliminary Notes
 
 This tutorial is intended to facilitate collaborative work on R analyses and RMarkdown manuscripts. 
-Manuscripts can be written using RMarkdown. Results from analyses in R can be automatically integrated into the text. 
+Manuscripts can be written using R Markdown. 
+Results from analyses in R can be automatically integrated into the text. 
 Furthermore, you can include tables or figures created in R directly to your RMarkdown manuscript. 
-This is extremely helpful and provides a great benefit. One drawback, however, is that collaborative work is made more difficult because annotations and comments are difficult to insert.
-This can be at least partially solved with the help of Git Hub. 
+This is extremely helpful and provides a great benefit. 
+One drawback, however, is that collaborative work is made more difficult because annotations and comments are difficult to insert.
+This can be at least partially solved with the help of GitHub. 
 Since there is a multitude of implementation possibilities, this tutorial does not claim to be exhaustive.
 All information listed here have been drawn and prepared from various documentations and tutorials, for example:
 
@@ -29,14 +31,22 @@ All information listed here have been drawn and prepared from various documentat
 * https://static1.squarespace.com/static/5757268f7da24f26ca7b21d2/t/5c7587114192021796d7cc84/1551206162093/R_Overleaf_Integration.pdf
 * A Reproducible Data Analysis Workflow with R Markdown, Git, Make, and Docker, https://psyarxiv.com/8xzqy/
 
-First, you will make all the necessary preparations in RStudio and GitHub. Then you will learn how to work collaboratively on scripts and texts. 
+First, you will make all the necessary preparations in RStudio and GitHub. 
+Then you will learn how to work collaboratively on scripts and texts. 
 
 \newpage
 # Set up Git and RStudio
 
 ## GitHub and Git
 
-First, you have to sign up at GitHub (https://github.com/) and download Git (if you have trouble installing Git, I would recommend [this](https://happygitwithr.com/install-git.html) tutorial). 
+First, you have to sign up at GitHub (https://github.com/) and download Git. If you have trouble installing Git, you may want to resort to the following guides:
+
+- [GitHub's Git Guides] (https://github.com/git-guides/install-git)
+- [Happy Git With R](https://happygitwithr.com/install-git.html) 
+
+As mentioned in the first of this guides, Git is automatically installed, if you install the GitHub client, and we strongly recommend to do so for a number of reasons mentioned below. Download it here:
+
+- [GitHub Desktop](https://desktop.github.com)
 
 _Attention! If you use Windows, Git will automatically be installed into you C:/Program Files/ directory. Often, the space in the directory name causes problems._ 
 _Therefore, I would recommend to choose a differenct directory for installation._
