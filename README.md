@@ -49,5 +49,5 @@ While we try our best to provide you with our knowledge on R Markdown, we consid
 
 Because later on in this course, we will also use the R package *papaja* dedicated to use R Markdown for writing psychological articles in APA style (so far only available for its 6th edition), one needs to install it as described on the author's GitHub site. It may also pay to familiarize yourself with the manual.
 
-- [*papaja* Download][9]
-- [*papaja* Manual][10]
+- [*papaja* Download](https://github.com/crsh/papaja)
+- [*papaja* Manual](http://frederikaust.com/papaja_man/)
