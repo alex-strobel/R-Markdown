@@ -15,10 +15,10 @@ In this course, you will learn how to use R Markdown for that purpose. We provid
 [03_Resources/](03_Resources/)       - further resources (so far not fully functional)<br>
 [renv/](renv/)                       - contains a file to initiate the R environment of this course<br>
 [activateCourse.R](activateCourse.R) - R script for activating the course via `renv` or via manual setup<br>
-[flag_project_root_RMDcourse.txt](flag_project_root_RMDcourse.txt) - used to automatically set wordking directory<br>  
+[flag_project_root_RMDcourse.txt](flag_project_root_RMDcourse.txt) - used to automatically set working directory<br>  
 [R-Markdown.Rproj](R-Markdown.Rproj) - can be ignored or used for bundling together all activity in this project<br>
 [README.md](README.md)               - this document<br>
-[renv.lock](renv.lock)               - a list of R packages automatically downloaded and attached to the course's environment<br>
+[renv.lock](renv.lock)               - a list of R packages automatically downloaded and attached to the course's environment
 
 ## How to use this repository
 
