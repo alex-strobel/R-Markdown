@@ -1,6 +1,6 @@
 # R-Markdown
 
-[Alexander Strobel](mailto:alexander.strobel@tu-dresden.de) and [Christoph Scheffel](mailto:christoph_scheffel@tu-dresden.de)
+[Alexander Strobel](mailto:alexander.strobel@tu-dresden.de) and [Christoph Scheffel](mailto:christoph_scheffel@tu-dresden.de)<br>
 Faculty of Psychology<br>
 TU Dresden
 
