@@ -10,7 +10,7 @@ In this course, you will learn how to use R Markdown for that purpose. We provid
 
 ## Folder structure
 
-[01_Lessons/](01_Lessons/)           - so far three lessons to familiarize you with RMarkdown and LaTeX<br>
+[01_Lessons/](01_Lessons/)           - so far three lessons to familiarize you with R Markdown and LaTeX<br>
 [02_Solutions/](02_Solutions/)       - solutions to the exercises at the end of each lesson<br>
 [03_Resources/](03_Resources/)       - further resources (so far not fully functional)<br>
 [renv/](renv/)                       - contains a file to initiate the R environment of this course<br>
