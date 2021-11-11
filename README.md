@@ -1,5 +1,6 @@
 # R-Markdown
-A course to learn R Markdown
+
+Welcome to our introductory R Markdown course! R Markdown is a simple and an easy to learn formatting syntax for authoring HTML, PDF, and MS Word documents. In combination with a handful of LaTeX commands, R Markdown allows to create updatable and reproducible reports.   
 
 ## Folder structure
 [01_Lessons/](01_Lessons/)           - so far three lessons to familiarize you with RMarkdown and LaTeX<br>
@@ -10,6 +11,7 @@ A course to learn R Markdown
 [activateCourse.R](activateCourse.R) - R script for activating the course via renv or via manual setup
 
 ## How to use this repository
+
 In order to take this course, first navigate to the folder where you want the course to be stored and RMarkdwon files to be executed. Then clone this repository from the RStudio console via the following command:
 
 `git clone https://github.com/alex-strobel/R-Markdown.git` 
