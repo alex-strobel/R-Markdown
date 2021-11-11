@@ -44,7 +44,7 @@ So far, we could not find a both useful *and* visually appealing introduction, j
 While we try our best to provide you with our knowledge on R Markdown, we consider us still as novices ourselves. So, it may pay to read the R Markdown Guide, and often enough, you may want to refer to the R Markdown Cheat Sheet:
 
 - [R Markdown Guide](https://bookdown.org/yihui/bookdown/)
-- [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+- [R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
 
 Because later on in this course, we will also use the R package *papaja* dedicated to use R Markdown for writing psychological articles in APA style (so far only available for its 6th edition), one needs to install it as described on the author's GitHub site. It may also pay to familiarize yourself with the manual.
 
