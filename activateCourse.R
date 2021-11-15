@@ -9,7 +9,7 @@
 # R-Markdown repository in
 
 # Change to project directory via here package
-library (here) 
+library(here) 
 # set top level directory to source file
 here::i_am("flag_project_root_RMDcourse.txt")
 
