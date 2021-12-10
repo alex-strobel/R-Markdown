@@ -1,0 +1,274 @@
+---
+title             : "R Markdown Lesson 04: Using Papaja"
+shorttitle        : "Using Papaja"
+
+author: 
+  - name          : "Alexander Strobel"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Faculty of Psychology, Technische Universität Dresden, 01062 Dresden, Germany"
+    email         : "alexander.strobel@tu-dresden.de"
+  - name          : "Christoph Scheffel"
+    affiliation   : "1"
+
+affiliation:
+  - id            : "1"
+    institution   : "Technische Universität Dresden"
+
+authornote: |
+  Alexander Strobel, Christoph Scheffel, Faculty of Psychology, Technische Universität Dresden, 01062 Dresden, Germany; 
+  This work was supported by SFB 940/2. 
+
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  
+  One or two sentences to put the results into a more **general context**.
+  
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib", "lesson04.bib", "SCS.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+# required packages
+library(papaja)
+library(psych)
+library(pwr)
+library(lavaan)
+
+# add references for these packages to BibTeX file
+r_refs("r-references.bib")
+
+# required function
+
+# function for generating random correlated variables
+randcorr <- function(rho, nobs, nvars, precision = 0, matrix.found = F) {
+
+  # This function returns a matrix of N rows (equaling the number of nobs) by P colums
+  # (equaling the number of nvars) that fulfil the requirement to be correlated as
+  # specified by the numeric value or matrix rho. If rho is a numeric value, all
+  # variables will correlate with r = rho. If rho is a symmetric correlation matrix
+  # (with 1 in the diagonal), the intercorrelations of the variables generated will
+  # reproduce rho to a precison of 0 (default) as a rough approximation using only one
+  # generation cycle or 1 (approxiation to .x), 2 (.xx), and so on (with increasing, but
+  # generally negligible time to find a respective solution). The number of cycles needed
+  # to find a matrix fulfilling the requirements is returned via matrix.found=T.
+  
+  compare <- function(x, y, prec = 2) {
+    X = round(x, prec)
+    Y = round(y, prec)
+    return(X == Y)
+  }
+  
+  if (dim(as.data.frame(rho))[1] == 1) {
+    C = matrix(rho, nvars, nvars)
+    
+    for (i in 1:nvars) {
+      C[i, i] = 1
+    }
+  } else {
+    C = rho
+  }
+  
+  A = chol(C)
+
+  i = 1;
+  
+  if (precision == 0) {
+    W = rnorm(nobs * nvars, 0, 1)
+    dim(W) = c(nobs, nvars)
+    y = W %*% A
+  } else {
+    k = 1
+    
+    while (k == 1) {
+      W = rnorm(nobs * nvars, 0, 1)
+      dim(W) = c(nobs, nvars)
+      y = W %*% A
+      D = cor(y)
+      
+      c = compare(round(C, precision), round(D, precision), prec = precision)
+      if (all(c) == T) {
+        k = 0
+      }
+      i = i + 1
+    }
+  }
+  if (matrix.found == T) {
+    print(paste("matrix found in ", i, " steps.", sep = ""))
+  }
+  
+  return(data.frame(y))
+  
+}
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(242)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+In this lesson, we will now come to the really helpful R *papaja* written by @R-papaja that enables you to format your R Markdown document according to APA style, although currently, only the 6th edition [@APA1994] is supported, to easily report results of common statistical procedures and to appropriately format and place tables and figures.
+To create an R Markdown manuscript with *papaja*, you first need to install the *papaja* package from GitHub via
+
+```
+devtools::install_github("crsh/papaja")
+devtools::install_github("crsh/papaja@devel")
+```
+Then choose `File > New File > R Markdown... > From Template` and select the template *APA-stye manuscript (6th edition) {papaja}* upon which a document similar to this one ist created that contains a header where you can enter the tritle and the running head (entry `shorttitle`), all the authors with their affiliations, the author note and so on. 
+Under `bibliography`, per default *papaja* states `r-references.bib`.
+This file is automatically generated and includes references to the R version you are using as well as to all the packages you source in your manuscript. 
+You will of course need additional references, so you need to create a separate BibTeX file with all the further references needed and list it along with `r-references.bib` under `bibliography` (see the header of this file). 
+You now first write your Introduction section as usual using R Markdown language, citing your references in your BibTeX library either in the text like @R-papaja or in parentheses like [@R-papaja]. 
+
+# Methods
+We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+
+Another fine issue of the *papaja* template is that it per default puts the 21-word solution [cf. @Simmons2012] at the beginning of your Methods section. This is also the place where you should note whether your study was preregistered and comes with open data and code (and if so, link to the respective repository). 
+
+Now you are ready to write your Methods section. It is recommended that your analyses should not be run within one big R code chunk, but in separate ones as your analysis pipeline progesses, i.e., one code chunk for demographics ahead of the *Participants* subsection, one code chunk for descriptive statistics, another one for analysis 1 yet another one for analysis 2 and so on ... But we need some data, so we generate five random variables along with some age and gender variable.   
+
+```{r data, echo = F}
+# generate random correlated variables X1 to X5
+df = randcorr(.3, 256, 5)
+
+# at random age and gender
+df$age = round(rnorm(256, mean = 22, sd = 1))
+df$gender = round(runif(256, 0, 1))
+```
+
+## Participants
+
+Without knowing the actual sample size, gender composition and age statistics, you can use placeholders that refer to the data and write: 
+
+The sample consisted of `r nrow(df)` participants (`r sum(df$gender == 0)` women, age $M=$ `r round(mean(df$age), 2)`, $SD=$ `r round(sd(df$age), 2)`, range `r paste0(range(df$age), collapse = "-")` years). 
+
+This enables you to write large parts of your Results section without resorting to the actual data or to data at all, as long as you know the respective variable names in your final data set.
+
+## Material
+
+In this subsection, you describe your material, e.g., questionnaires or stimuli used. 
+Often enough, this will be material that you already described in earlier manuscript, and more likely than not it took you some time to arrive the perfect description of your material back then. 
+While it is generally accepted that authors should omit self-plagiarism, an optimal description of a material or aprocedure---at least in our opinion---can and indeed *should* be reused. 
+Would Pythagoras have paraphrased his theorem $a^2 + b^2 = c^2$ in later writings as "if you square $a$ and add the square of $b$, this equals the square of $c$" or "the sum of squares of $x$ and $y$ gives the square of $z$"? 
+So, you may save your standard material description in a separate R Markdown file and include it in your main manuscript as a so-called *child*.
+
+```{r child = "NFC.Rmd"}
+```
+
+Of course, you need to add any references in your separate R Markdown file to your main BibTeX file by hand.
+Another option would be to save all the entries of your separate R Markdown file as a separate BibTeX file too and to attach this file to your manuscript in the `bibliography` entry in the document header.
+As a demonstration: the file "SCS.bib" is added to the `bibliography` entry and the instrument description is added to the present manuscript as a *child*.
+
+```{r child = "SCS.Rmd"}
+```
+
+## Procedure
+
+Here, you describe in all necessary detail how your study was conducted. 
+This is one of the most important parts of your manuscript, because ideally, everyone reading your manuscript should be able to directly replicate your study. You may assume that writing something like "Participants were seated in a dimly lit room ... stimuli were presented on a 21 inch monitor ... participants responded via the keyboard", should do. 
+Actually, you should provide some measure of what *dimly lit* actually meant in your lab, should give the point size of your stimuli and the angle of separation together with the refresh rate of your monitor (ideally also the monitor's brand and model number), and the same holds true for your keyboard. Gamers will tell you that keyboards really can make a difference ... 
+
+## Data analysis
+We used `r cite_r("r-references.bib")` for all our analyses.
+
+The above sentence demonstrates one great feature of *papaja*: via the `cite_r` function, it automatically reports the R version and all the packages used at the beginning of the section *Data analysis* in the Methods section. As this can be somewhat annoying because even automatically loaded packages will be listed---making the packages list quite long---and because if using RStudio, this is not automatically reported, you may want to refer to the main packages used by hand and give all the supporting packages in the supplement.
+
+# Results
+
+## Descriptives
+
+Here, you run another R code chunk and provide a table with all the relevant descriptive statistics. As above for the demographics, you can write all the code already without having actual data. Now, we use the `apa_table` function to do so:
+
+```{r descriptives, echo = T}
+apa_table(describe(df)[1:5 , c(3:5, 11:12)], caption = "Descriptive statistics of the variables of interest")
+```
+
+Note that the table is automatically placed at the end of the manuscript, just as APA 6th edition style requires. The same is true for figures:
+
+```{r boxplots, echo = T, fig.cap = "Boxplots of the variables of interest"}
+boxplot(df[, 1:5], lty = 1, staplewex = NA)
+```
+
+## Correlation analysis
+
+Now, we want to run a correlation analysis of our five variables of interest. Again, we use the `apa_table` function, this time along with the `printnum` function that lets you control how your numeric values are presented. APA 6th requires you to provide correlations without a zero before the dot, because correlations cannot be greater than one.   
+
+```{r correlation, echo = T}
+correlations = cor(df[, 1:5])
+apa_table(printnum(correlations, gt1 = F), 
+          caption = "Intercorrelations of the variables of interest")
+```
+
+This already looks fine, but the ones in the diagonal of the correlation matrix are now presented as "> .99". We would rather have "--" in the diagonal (and some note to the table) and therefore write:
+
+```{r correlation2, echo = T}
+correlations = sub("> .99", "--", printnum(cor(df[, 1:5]), gt1 = F))
+apa_table(correlations, 
+          caption = "Intercorrelations of the variables of interest", 
+          note = "\\textit{N} = 256", 
+          escape = F)
+```
+
+The `escape = F` argument enables you to use LaTeX syntax in your caption or note. You could also want to present the reliabilities of the variables in question in the diagonal, and you might want to present them in italics. To do so, write:
+
+```{r correlation3, echo = T}
+diag(correlations) = paste0("\\textit{(", printnum(runif(5, .7, .9), gt = F), ")}")
+
+apa_table(correlations, 
+          caption = "Intercorrelations of the variables of interest", 
+          note = "\\textit{N} = 256", 
+          escape = F)
+```
+
+The latter example shows how you can combine *papaja* functions with LaTeX commands to format your output *ad libitum*. 
+
+The *papaja* package also comes with a number of analysis-specific output formats. Consider, you want to perform a regression analysis and to regress X1 on X2. In this case, *papaja* allows you to provide the relevant statistics by referring to the slots generated by `apa.print`. As an example, your code could look like:
+
+```{r regression, echo = T}
+model = lm(X2 ~ X1, data = df)
+papaja_model = apa_print(model)
+```
+
+In the text, you would write: X1 predicted X2, `r papaja_model$full_result$X1`, with `r papaja_model$full_result$modelfit`. This way, you do not need to extract all the statistics from your analyses and type them in, but simply refer to a statistical model and set a placeholder for the---fully formatted---statistical results. When you later on decide (or being forced by reviewers) to drop some outliers, you do so earlier in your R Markdown file, and your manuscript still will give you the correct results for this analysis.
+
+
+# Discussion
+
+This is the hard part, and *papaja* will not help you in writing your discussion. 
+\newpage
+
+# References
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup
