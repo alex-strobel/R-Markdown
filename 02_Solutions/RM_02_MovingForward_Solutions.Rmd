@@ -1,5 +1,5 @@
 ---
-title: "RMarkdown Lesson 02: Moving Forward"
+title: "R Markdown Lesson 02: Moving Forward"
 subtitle: 'Solutions to the exercises'
 author: "Alexander Strobel & Christoph Scheffel"
 output: pdf_document
