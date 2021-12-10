@@ -1,4 +1,4 @@
-# SETTING UP RSTUDIO FOR RMARKDOWN AND THIS COURSE ----------------------------
+# SETTING UP RSTUDIO FOR R MARKDOWN AND THIS COURSE ---------------------------
 
 # Normally, you should not need this file, because we used the renv package
 # to create a portable environment for the R project of this course. Yet, if
