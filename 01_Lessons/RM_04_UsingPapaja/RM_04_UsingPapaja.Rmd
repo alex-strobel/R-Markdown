@@ -5,7 +5,7 @@ shorttitle        : "Using Papaja"
 author: 
   - name          : "Alexander Strobel"
     affiliation   : "1"
-    corresponding : yes    # Define only one corresponding author
+    corresponding : yes
     address       : "Faculty of Psychology, Technische Universität Dresden, 01062 Dresden, Germany"
     email         : "alexander.strobel@tu-dresden.de"
   - name          : "Christoph Scheffel"
@@ -56,10 +56,11 @@ output            : papaja::apa6_pdf
 
 ```{r setup, include = FALSE}
 # required packages
-library(papaja)
-library(psych)
-library(pwr)
-library(lavaan)
+library(car)    # for ANOVA
+library(papaja) # for formatting in APA style 
+library(psych)  # for correlation analysis
+library(pwr)    # for power calculation
+library(lavaan) # for mediation analysis
 
 # add references for these packages to BibTeX file
 r_refs("r-references.bib")
@@ -131,7 +132,6 @@ randcorr <- function(rho, nobs, nvars, precision = 0, matrix.found = F) {
 ```{r analysis-preferences}
 # Seed for random number generation
 set.seed(242)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
 In this lesson, we will now come to the really helpful R *papaja* written by @R-papaja that enables you to format your R Markdown document according to APA style, although currently, only the 6th edition [@APA1994] is supported, to easily report results of common statistical procedures and to appropriately format and place tables and figures.
@@ -152,7 +152,7 @@ We report how we determined our sample size, all data exclusions (if any), all m
 
 Another fine issue of the *papaja* template is that it per default puts the 21-word solution [cf. @Simmons2012] at the beginning of your Methods section. This is also the place where you should note whether your study was preregistered and comes with open data and code (and if so, link to the respective repository). 
 
-Now you are ready to write your Methods section. It is recommended that your analyses should not be run within one big R code chunk, but in separate ones as your analysis pipeline progesses, i.e., one code chunk for demographics ahead of the *Participants* subsection, one code chunk for descriptive statistics, another one for analysis 1 yet another one for analysis 2 and so on ... But we need some data, so we generate five random variables along with some age and gender variable.   
+Now you are ready to write your Methods section. It is recommended that your analyses should not be run within one big R code chunk, but in separate ones as your analysis pipeline progresses, i.e., one code chunk for demographics ahead of the *Participants* subsection, one code chunk for descriptive statistics, another one for analysis 1 yet another one for analysis 2 and so on ... But we need some data, so we generate five random variables along with some age and gender variable.   
 
 ```{r data, echo = F}
 # generate random correlated variables X1 to X5
@@ -165,11 +165,18 @@ df$gender = round(runif(256, 0, 1))
 
 ## Participants
 
-Without knowing the actual sample size, gender composition and age statistics, you can use placeholders that refer to the data and write: 
+This is the place where you need to provide a statement on how you determined your sample size. 
+This can but need not be based on a power calculation, but in any case you should add a power calculation.
+In our case, we wanted to have as many participants of our survey as we could get in a given time, but at least $N=250$ [cf. @Schoenbrodt2013].
+We therefore would write:
 
-The sample consisted of `r nrow(df)` participants (`r sum(df$gender == 0)` women, age $M=$ `r round(mean(df$age), 2)`, $SD=$ `r round(sd(df$age), 2)`, range `r paste0(range(df$age), collapse = "-")` years). 
+We aimed at a sample size of at least $N=250$. With this sample size, we wanted to make sure to arrive at stable estimates of the correlations obtained in the present study [cf. @Schoenbrodt2013] and to have adequate power to detect medium correlations according to the classification of @Gignac2016.
 
-This enables you to write large parts of your Results section without resorting to the actual data or to data at all, as long as you know the respective variable names in your final data set.
+Without knowing the actual sample size eventually achieved, gender composition and age statistics, you can use placeholders that refer to the data and write: 
+
+The sample consisted of `r nrow(df)` participants (`r sum(df$gender == 0)` women, age $M=$ `r round(mean(df$age), 2)`, $SD=$ `r round(sd(df$age), 2)`, range `r paste0(range(df$age), collapse = "-")` years). With an $N=$ `r nrow(df)`, we were able to detect correlations of $r\ge$ `r printnum(pwr.r.test(n = nrow(df), power = .80, sig.level = .01)$r, gt1 = F)` with a power of $1-\beta=.80$ at a Bonferroni-corrected significance level of $\alpha'=.05/5=.01$.  
+
+This enables you to write large parts of your Results section without resorting to the actual data (or to data at all), as long as you know the respective variable names in your final data set.
 
 ## Material
 
@@ -184,21 +191,26 @@ So, you may save your standard material description in a separate R Markdown fil
 
 Of course, you need to add any references in your separate R Markdown file to your main BibTeX file by hand.
 Another option would be to save all the entries of your separate R Markdown file as a separate BibTeX file too and to attach this file to your manuscript in the `bibliography` entry in the document header.
-As a demonstration: the file "SCS.bib" is added to the `bibliography` entry and the instrument description is added to the present manuscript as a *child*.
+As a demonstration: the file "SCS.bib" is added to the `bibliography` entry and the instrument description is added to the present manuscript as another *child*.
 
 ```{r child = "SCS.Rmd"}
 ```
 
+In the present example, we have five continuous variables X1 to X5 to correlate to each other, will regress X2 on X1 and will run an analysis of variance with Gender as the independent variable and X1 as the dependent variable. 
+
 ## Procedure
 
 Here, you describe in all necessary detail how your study was conducted. 
-This is one of the most important parts of your manuscript, because ideally, everyone reading your manuscript should be able to directly replicate your study. You may assume that writing something like "Participants were seated in a dimly lit room ... stimuli were presented on a 21 inch monitor ... participants responded via the keyboard", should do. 
-Actually, you should provide some measure of what *dimly lit* actually meant in your lab, should give the point size of your stimuli and the angle of separation together with the refresh rate of your monitor (ideally also the monitor's brand and model number), and the same holds true for your keyboard. Gamers will tell you that keyboards really can make a difference ... 
+This is one of the most important parts of your manuscript, because ideally, everyone reading your manuscript should be able to directly replicate your study. 
+You may assume that writing something like "Participants were seated in a dimly lit room ... stimuli were presented on a 21 inch monitor ... participants responded via the keyboard", should do. 
+Actually, you should provide some measure of what *dimly lit* actually meant in your lab, should give the point size of your stimuli and the angle of separation together with the refresh rate of your monitor (ideally also the monitor's brand and model number), and the same holds true for your keyboard. 
+Gamers will tell you that keyboards really make a difference ... 
 
 ## Data analysis
 We used `r cite_r("r-references.bib")` for all our analyses.
 
-The above sentence demonstrates one great feature of *papaja*: via the `cite_r` function, it automatically reports the R version and all the packages used at the beginning of the section *Data analysis* in the Methods section. As this can be somewhat annoying because even automatically loaded packages will be listed---making the packages list quite long---and because if using RStudio, this is not automatically reported, you may want to refer to the main packages used by hand and give all the supporting packages in the supplement.
+The above sentence demonstrates one great feature of *papaja*: via the `cite_r` function, it automatically reports the R version and all the packages used at the beginning of the section *Data analysis* in the Methods section. 
+As this can be somewhat annoying because even automatically loaded packages will be listed---making the packages list quite long---and because if using RStudio, this is not automatically reported, you may want to refer to the main packages used by hand and give all the supporting packages in the supplement.
 
 # Results
 
@@ -207,10 +219,11 @@ The above sentence demonstrates one great feature of *papaja*: via the `cite_r` 
 Here, you run another R code chunk and provide a table with all the relevant descriptive statistics. As above for the demographics, you can write all the code already without having actual data. Now, we use the `apa_table` function to do so:
 
 ```{r descriptives, echo = T}
-apa_table(describe(df)[1:5 , c(3:5, 11:12)], caption = "Descriptive statistics of the variables of interest")
+apa_table(describe(df)[1:5 , c(3:5, 11:12)], 
+          caption = "Descriptive statistics of the variables of interest")
 ```
 
-Note that the table is automatically placed at the end of the manuscript, just as APA 6th edition style requires. The same is true for figures:
+Note that the table is automatically placed at the end of the manuscript, just as APA 6th edition style requires. The same is true for figures that, as you may notice, *papaja* not only saves as PDF, but also as PNG (which still may not be sufficient for submission to a journal):
 
 ```{r boxplots, echo = T, fig.cap = "Boxplots of the variables of interest"}
 boxplot(df[, 1:5], lty = 1, staplewex = NA)
@@ -249,19 +262,78 @@ apa_table(correlations,
 
 The latter example shows how you can combine *papaja* functions with LaTeX commands to format your output *ad libitum*. 
 
-The *papaja* package also comes with a number of analysis-specific output formats. Consider, you want to perform a regression analysis and to regress X1 on X2. In this case, *papaja* allows you to provide the relevant statistics by referring to the slots generated by `apa.print`. As an example, your code could look like:
+The *papaja* package also comes with a number of analysis-specific output formats. Consider, you want to perform a regression analysis and to regress X1 on X2. In this case, *papaja* allows you to provide the relevant statistics by referring to the slots generated by the `apa.print` function. As an example, your code could look like:
 
 ```{r regression, echo = T}
 model = lm(X2 ~ X1, data = df)
 papaja_model = apa_print(model)
+apa_table(papaja_model)
 ```
 
-In the text, you would write: X1 predicted X2, `r papaja_model$full_result$X1`, with `r papaja_model$full_result$modelfit`. This way, you do not need to extract all the statistics from your analyses and type them in, but simply refer to a statistical model and set a placeholder for the---fully formatted---statistical results. When you later on decide (or being forced by reviewers) to drop some outliers, you do so earlier in your R Markdown file, and your manuscript still will give you the correct results for this analysis.
+In the text, you would write: X1 predicted X2, `r papaja_model$full_result$X1`, with `r papaja_model$full_result$modelfit`. This way, you do not need to extract all the statistics from your analyses and type them in, but simply refer to a statistical model and set a placeholder for the---fully formatted---statistical results. When you later on decide (or being forced by reviewers) to drop some outliers, you do so earlier in your R Markdown file, and your manuscript in an instant will give you the correct results for this analysis. Another great feature of *papaja* is that it automatically formats your results tables according to APA conventions (see Table 5) that was created using the command `apa_table(papaja_model)``
 
+Let us try another analysis type: an analysis of variance (ANOVA) using gender as independent variable and X1 as dependent variable. To do so, we must first convert gender into a factor via:
+
+```{r anova, echo = T}
+# generate variables for ANOVA
+iv = factor(df$gender, levels = c(0, 1), labels = c("female", "male"))
+dv = df$X1
+# set linear orthogonal contrasts
+options(contrasts = c("contr.sum", "contr.poly")) 
+# run Anova function of the car package to have Type III sum of squares
+ANOVA = Anova(lm(dv ~ iv), type = "3")
+papaja_ANOVA = apa_print(ANOVA)
+if (ANOVA$`Pr(>F)`[2] >= .05) {
+  ANOVA_significance = "insignificant"
+} else {
+  ANOVA_significance = "significant"
+}
+```
+
+Here, you would write:
+
+An ANOVA with Gender as independent variable and X1 as dependent variable was `r ANOVA_significance`, `r papaja_ANOVA$full_result$iv`.
+
+As already said: *papaja* formats your analysis output in a way that you can report it fully formatted in your manuscript. 
+It is recommended to read *papaja's* help files to get accustomed with its capabilities for various output formats. 
+
+Let us close with a figure and some recommendation on how not only have it saved automatically, but in a submittable format. To do so, we create a figure using R code, but then save it as Encapsulated PostScript which is the format most if not all journals accept. To have your figure appear as you want it to appear, you will need to perform a couple of trials, reduce the character expansion (aka `cex` or `cex.axis`), adjust the `mgp` parameter settings and so on. Also, to have the exact width your journal does accept for, say, a one-column figure of 90 mm width (equaling 90 * 0.0393701 = 3.54 inch), you need to make some further adjustments. Here is an example (code not visible in this document, but see Figure 2 at the end of the generated file and the figure-latex folder for the code's output):
+
+```{r figure2, fig.cap = "Scatterplot of X1 and X2", fig.width = 3.54, fig.height = 3.54, results = "hide"}
+par(mar = c(4, 4, 0.1, 0.1))  # adjust figure margins
+plot(X2 ~ X1, data = df, cex = .8, col = 8, las = 1)
+dev.copy2eps(file = "RM_04_UsingPapaja_files/figure-latex/figure2.eps")
+par(mar = c(5, 4, 4, 2) + .1) # reset figure margins
+```
 
 # Discussion
 
-This is the hard part, and *papaja* will not help you in writing your discussion. 
+More often than not, this will be the hardest part of preparing your manuscript, and unfortunately, *papaja* will not help you in writing your discussion. For now, let us recapitulate: 
+
+## Interim Summary
+
+In this lesson, you should have learned how to  
+
+- use the the *papaja* template to write dynamic and reproducible scientific manuscripts in APA style
+- use placeholders for reporting appropriately formatted statistical results without resorting to data at all
+- create tables and figures in APA style in an instance
+
+## Exercises
+
+To exercise what you have learned in this lesson:
+
+1. Report the results of a correlation analysis involving variables X1 and X2 in data.frame `df` using `apa_print` with the `cor.test` function.
+2. Format a correlation table in a way that prints significant correlations bold-faced.
+3. Save Figure 2 in Tagged Image File Format (tiff, another figure format commonly accepted at scientific journals) with 300 dpi resolution.
+
+## Outlook
+
+In the next and final lesson, you will learn how to  
+
+- collaborate on R Markdown files using *GitHub* 
+- use a portable and reproducible R environment for your collaborative work using the R package *renv* 
+- never have to edit paths in your R scripts via the R package *here* 
+
 \newpage
 
 # References
