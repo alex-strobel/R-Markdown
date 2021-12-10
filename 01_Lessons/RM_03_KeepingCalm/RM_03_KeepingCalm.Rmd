@@ -177,7 +177,7 @@ That is, you have to be (and ultimately *will* be) prepared to eventually load t
 
 ## The garden of forking paths
 
-It is wise to take some time in advance and to elaborate on the decision tree (AKA the _garden of forking paths_) that you can imagine. Let's say you first consider to check for missing values in your data. 
+It is wise to take some time in advance and to elaborate on the decision tree (AKA the *garden of forking paths*) that you can imagine. Let's say you first consider to check for missing values in your data. 
 Even at this stage, you have the choice to (1) remove cases with missing values or (2) impute missing values. 
 Choice option (1) would be advisable if there are a lot of missing values in the self-report measures of some participants, while with only a couple of missings, choice option (2), i.e., imputation, might seem preferable. 
 But what if you have both: Several participants skipped a whole page of some questionnaire, while others filled in most, but not all items of the questionnaires. 
@@ -404,7 +404,7 @@ ct = corr.test(df, method = tolower(correlation))
 In LaTeX, tables are usually generated like this (code in this knitted document invisible) and appear like the table below.
 Let us walk through the code: 
 First a table environment is generated, and '[b!]' forces LaTeX to position the table at the bottom of the page. 
-Then the table is centered, labeled for cross-referencing and given a caption (that states whether the correlations are Pearson or Spearman correlations, depending on the distribution of the variables of interest, see above and R code chunk _analysis.1_). 
+Then the table is centered, labeled for cross-referencing and given a caption (that states whether the correlations are Pearson or Spearman correlations, depending on the distribution of the variables of interest, see above and R code chunk *analysis.1*). 
 Then, the actual table is generated with R chunks embedded that refer to previously computed coefficients to be provided in the table. 
 A note to the table is inserted at the end.
 
@@ -535,14 +535,14 @@ In this lesson, you should have learned how to
 To exercise what you have learnt in this lesson, you might want to try the following:
 
 1. Inspect the BibTeX file associated with this document (lesson03.bib) to familiarize yourself with the format. Then write new entries for the following two references and cite them in the text:
-   + Cohen, J. (1988). _Statistical power analysis for the behavioral sciences._ Hillsdale: Erlbaum.
-   + Hemphill, J. F. (2003). Interpreting the magnitudes of correlation coefficients. _American Psychologist, 58_(1), 78–80.
+   + Cohen, J. (1988). *Statistical power analysis for the behavioral sciences.* Hillsdale: Erlbaum.
+   + Hemphill, J. F. (2003). Interpreting the magnitudes of correlation coefficients. *American Psychologist, 58*(1), 78–80.
 2. Slightly modify the analysis routine for the correlation analysis to compare the results of the appropriate correlation method defined in the analysis script with the alternative method, i.e., Spearman vs. Pearson correlations. Provide a table positioned exactly at the top of the page with the results of one method above the diagonal and the results of the alternative method below the diagonal (and the alphas in the diagonal).    
 3. Provide a figure with the 95% confidence intervals of the correlations you obtained, for both Spearman and Pearson correlations. Depending on which method is indicated by the tests of normality, Spearman correlations should be printed in black and Pearson correlations in grey (or vice versa). Position the figure exactly at the bottom of the page (and don't forget to give it a caption).
 
 # Outlook
 
-In the next lesson, we will now come to a really helpful R package: _papaja_ that enables you to  
+In the next lesson, we will now come to a really helpful R package: *papaja* that enables you to  
 
 * format your R Markdown document 
 * easily report results of common statistical procedures 
