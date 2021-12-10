@@ -63,7 +63,6 @@ knitr::opts_chunk$set(echo = F)
 library(psych)
 
 # required function
-# required function
 apa.coef <- function(coef, gt1 = T, digits = 2) { # function for reporting results according to APA conventions
   if (gt1 == T) {
     coef = format(round(coef, digits = digits), nsmall = digits)
@@ -85,9 +84,24 @@ In this lesson, you will learn about
 
 # The \LaTeX{} language
 
-\LaTeX{}, which is pronounced "Lah-tech", is a software for text processing and formulas. It follows the principle *what you mean is what you get* and thus differs fundamentally from common text processing programs. Because of its open source, the world wide availability and especially the remarkable functions for scientific texts, \LaTeX{} becomes more and more standard for scientific work. Because text is only compiled if you click the button, the program will not have problems processing even large documents, like dissertations. However, disadvantages include poorer user-friendliness. Even for simple formatting like *italic* or **bold**, commands must be used. Further, there is no live output of the current code (an issue, however, that is addressed in several curent \LaTeX{} engines like Overleaf (<https://www.overleaf.com>).
+\LaTeX{}, which is pronounced "Lah-tech", is a software for text processing and formulas. 
+It follows the principle *what you mean is what you get* and thus differs fundamentally from common text processing programs. 
+Because of its open source, the world wide availability and especially the remarkable functions for scientific texts, \LaTeX{} becomes more and more standard for scientific work.
+Because text is only compiled if you click the button, the program will not have problems processing even large documents, like dissertations. 
+However, disadvantages include poorer user-friendliness. 
+Even for simple formatting like *italic* or **bold**, commands must be used. 
+Further, there is no live output of the current code (an issue, however, that is addressed in several current \LaTeX{} engines like Overleaf (<https://www.overleaf.com>).
 
-\LaTeX{} operates with numerous macros designed to increase user-friendliness. Macros can be used by means of commands and environments. For example the command \verb+\today+ pastes the current date and \verb+\chapter{title}+ creates a title of a chapter. Larger sections can be formatted with environments. The command \verb+\begin{*name of environment*}+ initiates a new environment and the command \verb+\end{*name of environment*}+ quits it. For example, \verb+\begin{center}+ initiates an environment were all text is centered. Environments can also be stacked. However, the commands in \LaTeX{} are too extensive to be presented here comprehensively. It is therefore worth a look in the documentation (<https://www.latex-project.org/help/documentation/>).
+\LaTeX{} operates with numerous macros designed to increase user-friendliness. 
+Macros can be used by means of commands and environments.
+For example the command `\today` pastes the current date and `\chapter{title}` creates a title of a chapter.
+Larger sections can be formatted with environments. 
+The command `\begin{\*name of environment\*}` initiates a new environment and the command `\end{\*name of environment\*}` quits it. 
+For example, `\begin{center}` initiates an environment were all text is centered. 
+Environments can also be stacked. 
+However, the commands in \LaTeX{} are too extensive to be presented here comprehensively. 
+It is therefore worth a look in the documentation (<https://www.latex-project.org/help/documentation/>).
+
 
 The title page and the table of contents above give further examples of \LaTeX{} formatting. Actually, when rendering R Markdown documents, the document is converted to a \LaTeX{} document before it is finally written to a PDF file. As you may have noticed, we stated in the YAML header: "keep_tex: true". That way, the tex file generated from R Markdown will be kept in your working directory, so you can inspect it and learn more about the \LaTeX{} language[^1]. Yet, this is an R Markdown document, not a \LaTeX{} document, so we will not elaborate on great lengths on \LaTeX{}. There are simply a few things you want to do that you cannot do in R Markdown, and then it is great that you can resort to \LaTeX{}.
 
