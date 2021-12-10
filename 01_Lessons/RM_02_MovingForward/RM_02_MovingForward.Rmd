@@ -177,6 +177,9 @@ plot(y ~ x, cex = .5, col = grey(.5), xlim = c(-3, 3), ylim = c(-3, 3), cex.axis
 text(2, -2.5, bquote(italic(r) == .(paste0(apa.coef(ct$ci$r, gt1 = F), asterisk, collapse = ""))), cex = .8)
 
 ```
+Note that plotting a figure automatically generates a folder in the R Markdown file's directory that contains a PDF version of your figure. 
+Most likely this figure's format and size may not be sufficient for submission to a journal. 
+We will come back to this issue in the fourth lesson.
 
 # Interim Summary
 

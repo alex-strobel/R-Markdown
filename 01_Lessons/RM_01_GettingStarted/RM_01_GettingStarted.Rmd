@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 This is an R Markdown document. 
 Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. 
 In the following, I will briefly give a general outline of R Markdown, which is an easy to learn language for creating updatable and reproducible reports. 
+<!-- You may ask why I place every sentence on a new line. You will learn in lesson five that this makes collaborative work on R Markdown documents using GitHUb much easier, and still, all text of a paragraph is displayed correctly in the final document. And by the way, you now also have learned how to insert a comment into an R Markdown document -->
 In RStudio (RStudio Team, 2016), you first create a new file of format R Markdown, define some document-specific issues such as the title, author or the output format in the so-called YAML header, and then simply start writing! 
 Formatting is quite straightforward. 
 Some examples for formatting text are:
@@ -39,18 +40,27 @@ Some examples for formatting text are:
 >
 > reporting a power calculation: "Given $\alpha=.05$ (two-sided) and a power of $1-\beta=.95$, $N=138$ participants are needed to detect a \> correlation of $r=.30$."
 
-You may have noticed two things in the code that generated the above examples. First, all lines start with an "\> ". I did this because I wanted the examples to be indented. Second, for the last three lines, I embedded the results in a double \$ which results in the text being interpreted as LaTeX text, hence, it will be formatted that way. When you click the *Knit* button, a document will be generated that includes both the written content and the output of any embedded so-called R code chunks within the document. You can embed an R code chunk like this:
+You may have noticed two things in the code that generated the above examples. 
+First, all lines start with an "\> ". 
+I did this because I wanted the examples to be indented. 
+Second, for the last three lines, I embedded the results in a double \$ which results in the text being interpreted as LaTeX text, hence, it will be formatted that way. 
+When you click the *Knit* button, a document will be generated that includes both the written content and the output of any embedded so-called R code chunks within the document. 
+You can embed an R code chunk like this:
 
 ```{r cor1}
-set.seed(242)       # set custom seed for reproducible results
-x = rnorm(100)        # generate random variable x with 100 obs.
+set.seed(242)             # set custom seed for reproducible results
+x = rnorm(100)            # generate random variable x with 100 obs.
 y = 0.2 * x + rnorm(100)  # generate random variable y with 100 obs. that covaries with x
-cor(x, y)            # get Pearson correlation
+cor(x, y)                 # get Pearson correlation
 ```
 
-In this example, to have the same set of random variables and the same correlation returned each time, I set a custom seed, which is particularly important for arriving at reproducible results when doing simulations or bootstrapping. Here, I set the seed to 242, my favorite number (after all powers of two), but the number actually does not matter as long as it is always the same for the same analysis[^1]. Unless for demonstration purposes, you will usually not want to have the output of the code chunk shown as above just as it would appear on the console. In this case, set echo = F at the beginning of the code chunk. Still, you will have access to the output of the code chunk, as shown here for a correlation analysis.
+In this example, to have the same set of random variables and the same correlation returned each time, I set a custom seed, which is particularly important for arriving at reproducible results when doing simulations or bootstrapping. 
+Here, I set the seed to 242, my favorite number (after all powers of two), but the number actually does not matter as long as it is always the same for the same analysis[^1]. 
+Unless for demonstration purposes, you will usually not want to have the output of the code chunk shown as above just as it would appear on the console. 
+In this case, set echo = F at the beginning of the code chunk. 
+Still, you will have access to the output of the code chunk, as shown here for a correlation analysis.
 
-[^1]: To arrive at comparable results when doing random number generation using a different software, you also need to make sure that the same kind of random number generator is used. Preferably, you make sure to use the *Mersenne-Twister* random number generator, it is the default in both R and SPSS. You can retrieve the random number generator currently used via *RNGkind()* and can set or reset it using this function as well, e.g., via *RNGkind('Mersenne-Twister, 'Inversion', 'Rounding)*. By the way: You now also know (a) how to insert footnotes -- via "\^[footnote text]", and (b) how certain prespecified commands like the one to insert footnotes are not executed, but printed as is -- via a backslash ahead of the command, which in LaTeX/R Markdown is a so-called escape character. More on this matter in later lessons.
+[^1]: To arrive at comparable results when doing random number generation using a different software, you also need to make sure that the same kind of random number generator is used. Preferably, you make sure to use the *Mersenne-Twister* random number generator, it is the default in both R and SPSS. You can retrieve the random number generator currently used via `RNGkind()` and can set or reset it using this function as well, e.g., via `RNGkind('Mersenne-Twister, 'Inversion', 'Rounding)`. By the way: You now also know (a) how to insert footnotes -- via "\^[footnote text]", and (b) how certain prespecified commands like the one to insert footnotes are not executed, but printed as is -- via a backslash ahead of the command, which in LaTeX/R Markdown is a so-called escape character. More on this matter in later lessons.
 
 ```{r cor2, echo=F}
 correlation.analysis = cor.test(x, y)
@@ -75,7 +85,10 @@ if (pvalue >= 0.001) {
 }
 ```
 
-In this example, a code chunk is executed (which is not shown here), a correlation and the associated $p$-value are determined, and the correlation is classified as *small*, *medium* or *large*. Then, in the text, the result is reported by referencing the variables generated by the code chunk: "The variables were `r report.cor`, $r=$ `r correlation`, $p$ `r pvalue`". The sentence elements *large*, *.44* and *\< .001* are placeholders filled with content by the output of the code chunk. The great thing here is that if you might want or being urged (by a supervisor or a reviewer) to include more detail on the statistics, you can do so by easily adding another bit of code ... (invisible code chunck executed here)
+In this example, a code chunk is executed (which is not shown here), a correlation and the associated $p$-value are determined, and the correlation is classified as *small*, *medium* or *large*. 
+Then, in the text, the result is reported by referencing the variables generated by the code chunk: "The variables were `r report.cor`, $r=$ `r correlation`, $p$ `r pvalue`". 
+The sentence elements *large*, *.44* and *\< .001* are placeholders filled with content by the output of the code chunk. 
+The great thing here is that if you might want or being urged (by a supervisor or a reviewer) to include more detail on the statistics, you can do so by easily adding another bit of code ... (invisible code chunck executed here)
 
 ```{r cor3, echo=F}
 tstat=round(correlation.analysis$statistic,2)
@@ -84,7 +97,10 @@ df=correlation.analysis$parameter
 
 ... and then write "The variables were `r report.cor`, $r=$ `r correlation`, $t$(`r df`) = `r tstat`, $p$ `r pvalue`".
 
-In the above code chunks, the classification of the effect size was done using a conditional *if* command. If you have multiple correlations to be classified, this would result in rather long code chunks. In case you repeatedly use the same code to perform some task, just write a function. Doing so even allows you to easily switch between different classifcation schemes (in this example via the arguments *method='gignac'*, or *method='cohen'*, respectively).
+In the above code chunks, the classification of the effect size was done using a conditional *if* command. 
+If you have multiple correlations to be classified, this would result in rather long code chunks. 
+In case you repeatedly use the same code to perform some task, just write a function. 
+Doing so even allows you to easily switch between different classification schemes (in this example via the arguments `method='gignac'`, or `method='cohen'`, respectively).
 
 ```{r cor5, echo=F}
 
@@ -117,7 +133,8 @@ report.p <- function(pvalue) {
 
 ```
 
-Here's the result: "The variables showed a correlation of $r=$ `r classify.r(round(correlation.analysis$estimate, 2))$r`, $p$ `r pvalue`, i.e., they `r classify.r(round(correlation.analysis$estimate, 2), method = 'gignac')$classify` according the classification scheme by Gignac and Szorodai (2016), and `r classify.r(round(correlation.analysis$estimate, 2), method = 'cohen')$classify` according the classification scheme by Cohen (1988).
+Here's the result: 
+"The variables showed a correlation of $r=$ `r classify.r(round(correlation.analysis$estimate, 2))$r`, $p$ `r pvalue`, i.e., they `r classify.r(round(correlation.analysis$estimate, 2), method = 'gignac')$classify` according the classification scheme by Gignac and Szorodai (2016), and `r classify.r(round(correlation.analysis$estimate, 2), method = 'cohen')$classify` according the classification scheme by Cohen (1988).
 
 # Including Plots
 
@@ -151,7 +168,7 @@ To exercise what you have learnt in this lesson, do the following:
 2.  Try to write 'partial eta-squared' using LaTeX code.
 3.  Use the variables $x$ and $y$ generated above to run a simple linear regression in a new code chunk and report the results in the body of the document including multiple $R$-squared.
 4.  Write a function that reports the means and standard deviations of $x$ and $y$, either without or with a statement on whether the variables were normally distributed (as determined via a Shapiro-Wilk test, with $p>.20$ indicating no deviation from the normal distribution).
-5.  Insert a figure of a scatter plot of the regression of $y$ on $x$ including confidence intervals of the regression slope using the *predict()* function. Also set the figure caption in the code chunk alongside fig.with and fig.height using the argument fig.cap.
+5.  Insert a figure of a scatter plot of the regression of $y$ on $x$ including confidence intervals of the regression slope using the `predict` function. Also set the figure caption in the code chunk alongside `fig.with` and `fig.height` using the argument `fig.cap`.
 
 # Further reading
 

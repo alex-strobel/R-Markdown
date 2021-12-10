@@ -112,11 +112,17 @@ In this lesson, we elaborate on the last one, especially on how to
 
 # Use a BibTeX library as reference manager
 
-As you alredy learned, RMarkdown uses LaTeX for formatting. Usually, LaTeX uses BibTex as citation format (but apparently, you can also use [CSL-JSON](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html), if you are familiar with that option). To ensure that everything works properly, make sure that you stated the name of the BibTeX file (via bibilography:) as well as the Citation Style Language (via csl:) in the YAML header (see top of the R Markdown document). 
+As you alredy learned, RMarkdown uses LaTeX for formatting. 
+Usually, LaTeX uses BibTex as citation format (but apparently, you can also use [CSL-JSON](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html), if you are familiar with that option). 
+To ensure that everything works properly, make sure that you stated the name of the BibTeX file (via bibilography:) as well as the Citation Style Language (via csl:) in the YAML header (see top of the R Markdown document). 
 
-You can fetch BibTeX formatted references from the web using, e.g., JabRef (https://www.jabref.org/) or import them from Endnote via the BibTeX Export output style that can be downloaded from the Endnote web site und the following URL: https://endnote.com/style_download/bibtex-export/ Double-click it, which should load it into Endnote, and then (under Edit) set it as Output Citation Style. Then export your Endnote file via File>Export to the desired location (please note that if you want to keep the old name and save the BibTex file to the same folder as the original file this might not work. Therefore, choose another filename or folder). For other citation managers, there are surely also options to get BibTex formatted entries. For Zotero, _papaja_ (more on this package in the next lesson) offers a special function called fetch_zotero_refs that we have not tried yet.
+You can fetch BibTeX formatted references from the web using, e.g., JabRef (https://www.jabref.org/) or import them from Endnote via the BibTeX Export output style that can be downloaded from the Endnote web site und the following URL: https://endnote.com/style_download/bibtex-export/. 
+Double-click it, which should load it into Endnote, and then (under Edit) set it as Output Citation Style. 
+Then export your Endnote file via `File > Export` to the desired location (please note that if you want to keep the old name and save the BibTex file to the same folder as the original file this might not work. Therefore, choose another filename or folder). For other citation managers, there are surely also options to get BibTex formatted entries. 
+For Zotero, *papaja* (more on this package in the next lesson) offers a special function called fetch_zotero_refs that we have not tried yet.
 
-You can then simply paste the BibTeX entries into your BibTeX file, but make yourself familiar with the BibTeX format to avoid frustration (see here: https://www.openoffice.org/bibliographic/bibtex-defs.html). Here is an examplary BibTeX entry: 
+You can then simply paste the BibTeX entries into your BibTeX file, but make yourself familiar with the BibTeX format to avoid frustration (see here: https://www.openoffice.org/bibliographic/bibtex-defs.html). 
+Here is an examplary BibTeX entry: 
 
 \begin{quote}
 \begin{tabbing}
@@ -132,53 +138,96 @@ You can then simply paste the BibTeX entries into your BibTeX file, but make you
 \end{tabbing}
 \end{quote}
 
-One important usage hint is that BibTex sets all letters of the title except the first to lowercase, which is not a bug, but a feature, as that way, automatically imported titles that happen to comprise uppercase words are correctly printed as lowercase. Likewise, all first letters of journal names are printed uppercase. If you want to retain uppercase or lowercase, put the respective letter in {}. Another issue is how to handle special characters such as ä, á, ê, ñ or ß. You can do this via {\\"a} {\\´a} {\\^e} {\\~n} or {\\ss}.
+One important usage hint is that BibTex sets all letters of the title except the first to lowercase, which is not a bug, but a feature, as that way, automatically imported titles that happen to comprise uppercase words are correctly (according to APA style) printed as lowercase. 
+On the contrary, all first letters of journal names are printed uppercase. 
+If you want to retain uppercase or lowercase, put the respective letter in {}. 
+Another issue is how to handle special characters such as ä, á, ê, ñ or ß. You can do this via {\\"a} {\\´a} {\\^e} {\\~n} or {\\ss}.
+In order to reduce a lot of editing, I wrote a function called `editbib` (see resources folder). Source the `editbib` function in R and then simply type 
 
-In order to reduce a lot of editing, I wrote a function called _editbib_ (see resources folder). Source the _editbib_ function in R and then simply type 
-
-\begin{quote}
+````
 editbib(infile=[path/name of exported Endnote file], outfile=[path/name of new file])
-\end{quote}
+```
 
-_editbib_ will then rename all references labels to AuthorYear (e.g., Strobel2018), will remove possible spaces in author names (e.g. in von Stumm) and handle some of the more common special characters. If you want to replace further characters, find out their so-called escape sequence. A comprehensive list of escape sequences can be found at: https://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf. Via the arguments _add.special_ and _add.replace_, you can then tell _editbib_ the additional characters to handle. 
+`editbib` will then rename all references labels to AuthorYear (e.g., Strobel2018), will remove possible spaces in author names (e.g. in von Stumm) and handle some of the more common special characters. 
+If you want to replace further characters, find out their so-called escape sequence. 
+A comprehensive list of escape sequences can be found at: https://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf. Via the arguments `add.special` and `add.replace`, you can then tell `editbib` the additional characters to handle. 
 
-Yes, we know this is a lot of work, it's so much easier with Word and Endnote, and indeed, it is! Yet, doing good and open science is hard and often frustrating work. However, all the work you invested initially will payout in the end because you will regain control of your work. And keep in mind, other people have already solved most of the hard stuff. And once you have set up your BibTeX library, citing is quite straightforward: To cite some reference, just write something like "For the present work, we used recently established effect size guidelines for correlations [@Gignac2016]." to have the reference cited in parentheses or "For the present work, we used the effect size guidelines for correlations recently established by @Gignac2016."
+Yes, we know this is a lot of work, it's so much easier with Word and Endnote, and indeed, it is! 
+Yet, doing good and open science is hard and often frustrating work (at least initially). 
+However, all the work you invested initially will payout in the end because you will regain control of your work. 
+Always keep in mind, other people have already solved most of the hard stuff, so just look for solutions to your specific problem in the internet. Sites *stackoverflow" will most of the time provide you with a solution. 
+
+Once you have set up your BibTeX library, citing is quite straightforward: To cite some reference, just write something like "For the present work, we used recently established effect size guidelines for correlations [@Gignac2016]." to have the reference cited in parentheses or "For the present work, we used the effect size guidelines for correlations recently established by @Gignac2016."
 
 # Write custom code for your analysis pipeline 
 
 ## The problem
 
-In the last lessons, we have introduced several functions that evaluate the outcome of some statistical analysis (such as effect size magnitudes) or report the results in a prespecified way (such as correlations with 95% confidence intervals and $p$-values). Given that you want to write an analysis pipeline for, say, a registered report, this is especially important, because you can deliver the analysis code for testing your preregistered hypotheses already along with your registered report, which certainly enhances your chances in the Stage 1 review process. Yet, usually, you do not yet have data to test your analysis pipeline. One way would be to collect some pilot data, but the sample size would probably be too small to allow for certain decisions to be made along the way. Another way would, therefore, be to simulate data, add some noise, and check your routines with these simulated data. 
+In the last lessons, we have introduced several functions that evaluate the outcome of some statistical analysis (such as effect size magnitudes) or report the results in a prespecified way (such as correlations with 95% confidence intervals and $p$-values). 
+Given that you want to write an analysis pipeline for, say, a registered report, this is especially important, because you can deliver the analysis code for testing your preregistered hypotheses already along with your registered report, which certainly enhances your chances in the Stage 1 review process. 
+Yet, usually, you do not yet have data to test your analysis pipeline. 
+One way would be to collect some pilot data, but the sample size would probably be too small to allow for certain decisions to be made along the way. 
+Therefore another way would be to simulate data, add some noise, and check your routines with these simulated data. 
 
-In the following, we will follow the latter path by assuming that we want to run some really boring analysis: We will have three cross-sectionally measured self-report variables that we want to include in a mediation model (the pros and cons of such an analysis plan put aside for now). The the 'independent' variable $X$, the 'dependent' variable $Y$, and the mediator variable $Z$ are measured as continuous measures, but we cannot be sure whether they are normally distributed. Therefore, (univariate or multivariate) normality tests will have to be performed, decisions on data normalization, transformation, and outlier exclusions will have to be considered and ideally predetermined -- and all in your pre-written code! That is, you have to be (and ultimately _will_ be) prepared to eventually load the real data into your R Markdown script, execute your prespecified analysis at a glance and produce the results section of your manuscript in no longer than a few seconds (or minutes, depending on the complexity of your analyses). 
+In the following, we will follow the latter path by assuming that we want to run some really boring analysis: 
+We will have three cross-sectionally measured self-report variables that we want to include in a mediation model (the pros and cons of such an analysis plan put aside for now). 
+The the 'independent' variable $X$, the 'dependent' variable $Y$, and the mediator variable $Z$ are measured as continuous measures, but we cannot be sure whether they are normally distributed. 
+Therefore, (univariate or multivariate) normality tests will have to be performed, decisions on data normalization, transformation, and outlier exclusions will have to be considered and ideally predetermined -- and all in your pre-written code! 
+That is, you have to be (and ultimately *will* be) prepared to eventually load the real data into your R Markdown script, execute your prespecified analysis at a glance and produce the results section of your manuscript in no longer than a few seconds (or minutes, depending on the complexity of your analyses). 
 
 ## The garden of forking paths
 
-It is wise to take some time in advance and to elaborate on the decision tree (AKA the _garden of forking paths_) that you can imagine. Let's say you first consider to check for missing values in your data. Even at this stage, you have the choice to (1) remove cases with missing values or (2) impute missing values. Choice option (1) would be advisable if there are a lot of missing values in the self-report measures of some participants, while with only a couple of missings, choice option (2), i.e., imputation, might seem prefereable. But what, if you have both: Several participants skipped a whole page of some questionnaire, while others filled in most, but not all items of the questionnaires. This would most probably result in a two-step approach: firstly, remove all participants who have more than some prespecified number of missings (but how much is tolerable?), and secondly, impute missings for the remainder of the participants (but by using which imputation method?). 
+It is wise to take some time in advance and to elaborate on the decision tree (AKA the _garden of forking paths_) that you can imagine. Let's say you first consider to check for missing values in your data. 
+Even at this stage, you have the choice to (1) remove cases with missing values or (2) impute missing values. 
+Choice option (1) would be advisable if there are a lot of missing values in the self-report measures of some participants, while with only a couple of missings, choice option (2), i.e., imputation, might seem preferable. 
+But what if you have both: Several participants skipped a whole page of some questionnaire, while others filled in most, but not all items of the questionnaires. 
+This would most probably result in a two-step approach: firstly, remove all participants who have more than some prespecified number of missings (but how much is tolerable?), and secondly, impute missings for the remainder of the participants (but by using which imputation method?). 
 
-Also, exclusion of outliers might be challenging: Do you remove univariate outliers by means of boxplots where outliers are defined as values 1.5 interquartile ranges (IQR) above or below the box? Or aren't the outliers rather the extreme values beyond 3 IQR? And what, if after removel of the outliers via boxplots, a new boxplot reeals new outliers? Or do you rather remove outliers by means of multivariate analyses such as Mahalanobis distances? And if so, what is your criterion for doing so? 
+Also, exclusion of outliers might be challenging: 
+Do you remove univariate outliers by means of boxplots where outliers are defined as values 1.5 interquartile ranges (IQR) above or below the box? 
+Or aren't the outliers rather the extreme values beyond 3 IQR? 
+And what if after removel of the outliers via boxplots, a new boxplot reveals new outliers? 
+Or do you rather remove outliers by means of multivariate analyses such as Mahalanobis distances? 
+And if so, what is your criterion for doing so? 
 
-To complicate matters even further: If you choose univariate normality tests, do you opt for normalizing variables (i.e., trying to make them more 'normal' by ranking the data and then transforming the rank order to the normal distribution)? And if you opt for normalizing, what would be the algorithm used to do so (there are at least four of them)? And do you normalize ahead of removing outliers or afterwards?
+To complicate matters even further: 
+If you choose univariate normality tests, do you opt for normalizing variables (i.e., trying to make them more 'normal' by ranking the data and then transforming the rank order to the normal distribution)? 
+And if you opt for normalizing, what would be the algorithm used to do so (there are at least four of them)? 
+And do you normalize ahead of removing outliers or afterwards?
 
-And finally: do you -- depending on the final data (quality) or per default -- use standard/parametric or nonparametric/robust tests  such as Pearson correlations and linear regression or rather Spearman correlations and robust regression (and if so, using which algorithm)? May you rather consider the estimation of Bayes factors and posterior estimates for your correlation/regression coefficients instead of standard frequentist analyses? And if so, is there a sound approach to Bayesian mediation analysis? Certainly, there are multiple, seemingly sound approaches, but which one to choose? 
+And finally: do you -- depending on the final data (quality) or per default -- use standard/parametric or nonparametric/robust tests  such as Pearson correlations and linear regression or rather Spearman correlations and robust regression (and if so, using which algorithm)? 
+May you rather consider the estimation of Bayes factors and posterior estimates for your correlation/regression coefficients instead of standard frequentist analyses? 
+And if so, is there a sound approach to Bayesian mediation analysis? 
+Certainly, there are multiple, seemingly sound approaches, but which one to choose? 
 
-This simple example -- three variables to correlate and then to put into a mediation model, which does not seem to be too hard a problem, might well illustrate the vast amount of degrees of freedom you have in statistical analyses. Still, we have to keep calm and carry on! In an ideal world, we would sketch all the forking paths and discuss them with our peers, which more likely than not would result in a high degree of disagreement and additional forking paths, so voting on the to be preferred path might be an option to set up our analysis pipeline. Even better, we would run all other (or at least all other -- judging from our peers' votes -- _plausible_) paths and add the respective results to a supplement of our forthcoming paper. 
+This simple example -- three variables to correlate and then to put into a mediation model, which does not seem to be too hard a problem, might well illustrate the vast amount of degrees of freedom you have in statistical analyses. 
+Still, we have to keep calm and carry on! 
+In an ideal world, we would sketch all the forking paths and discuss them with our peers, which more likely than not would result in a high degree of disagreement and additional forking paths, so voting on the to be preferred path might be an option to set up our analysis pipeline. 
+Even better, we would run all other (or at least all other -- judging from our peers' votes -- *plausible*) paths and add the respective results to a supplement of our forthcoming paper. 
 
 ## The present approach
 
-Yet, it would go beyond the scope of this R Markdown course if we would elaborate on the decisions to be made during the specification of our analysis plan. For this lesson, we will assume data and analysis steps as follows:
+Yet, it would go beyond the scope of this R Markdown course if we would elaborate on the decisions to be made during the specification of our analysis plan. 
+For this lesson, we will assume data and analysis steps as follows:
 
-* we have no missings in the data, but $N=256$ observations^[Why do we have $N=256$ participants? Firstly, 256 is a power of 2 which is always a good number. Yet, secondly and more importantly, if you do correlation analysis, you need to make sure to arrive at stable estimates, which in simulations by @Schoenbrodt2013 usually is the case only if your sample size is N $\ge$ 250.] of the variables $X$, $Y$, and $Z$, with internal consistencies of $\alpha_{X}=.82$, $\alpha_{Y}=.76$, and $\alpha_{Z}=.79$
-* the data are somewhat skewed and do not fully conform to either univariate or multivariate normality
-* there are some outliers, the exclusion of which on the basis of a test for multivariate normality ameliorates data quality
-* depending on whether there is still deviation from normality, we use either Pearson correlations and standard linear Regression or robust variants, i.e., Spearman correlations and robust regression
-* for testing the indirect effect in our mediation model, we use bootstrapping and extract bias-corrected and accelerated confidence intervals 
+- We have no missings in our $N=256$ observations^[Why do we have $N=256$ participants? Firstly, 256 is a power of 2 which is always a good number. Yet, secondly and more importantly, if you do correlation analysis, you need to make sure to arrive at stable estimates, which in simulations by @Schoenbrodt2013 usually is the case only if your sample size is N $\ge$ 250.] of the variables $X$, $Y$, and $Z$, with internal consistencies of $\alpha_{X}=.82$, $\alpha_{Y}=.76$, and $\alpha_{Z}=.79$
+- The data are somewhat skewed and do not fully conform to either univariate or multivariate normality
+- There are some outliers, the exclusion of which on the basis of a test for multivariate normality ameliorates data quality
+- Depending on whether there is still deviation from normality, we use either Pearson correlations and standard linear Regression or robust variants, i.e., Spearman correlations and robust regression
+- For testing the indirect effect in our mediation model, we use bootstrapping and extract bias-corrected and accelerated confidence intervals 
 
 In what follows, routines are established that report and evaluate the results of our analyses without knowing in advance what they look like.  
 
 ## The analysis pipeline
 
-We first simulate three correlated variables $X$, $Y$, and $Z$ from a normal distribution with $\mu=0$ and $\sigma=1$. We then add some noise by randomly assigning four data points in $Y$ and $Z$ with values from a uniform distribution with $min=3.75$ and $max=4.25$. We then retrieve descriptives including skew and kurtosis, run a Shapiro-Wilk test for univariate normality and a Mardia test for multivariate normality and identify possible multivariate outliers based on squared Mahalanobis distances. After reporting and illustrating the descriptive results., we run the actual statistical tests. Depending on the distribution characteristics observed, we either run standard correlation and regression analyses, i.e., Pearson correlation and standard linear regression, or robust alternatives, i.e. Spearman correlations and robust regression. We also state which versions of R and RStudio we used and which packages we employed. This is not only done to give proper credit, but also because for some statistical procedures, it can make a difference which version of R and/or R packages one was using when it comes to reproduce the results. Therefore, we state that we used R [@R-base] with RStudio [@RStudio] and employed the package _psych_ [@R-psych].
+We first simulate three correlated variables $X$, $Y$, and $Z$ from a normal distribution with $\mu=0$ and $\sigma=1$. 
+We then add some noise by randomly assigning four data points in $Y$ and $Z$ with values from a uniform distribution with $min=3.75$ and $max=4.25$. 
+We then retrieve descriptives including skew and kurtosis, run a Shapiro-Wilk test for univariate normality and a Mardia test for multivariate normality and identify possible multivariate outliers based on squared Mahalanobis distances. 
+After reporting and illustrating the descriptive results, we run the actual statistical tests. 
+Depending on the distribution characteristics observed, we either run standard correlation and regression analyses, i.e., Pearson correlation and standard linear regression, or robust alternatives, i.e., Spearman correlation and robust regression. 
+We also state which versions of R and RStudio we used and which packages we employed. 
+This is not only done to give proper credit, but also because for some statistical procedures, it can make a difference which version of R and/or R packages one was using when it comes to reproduce the results. 
+Therefore, we state that we used R [@R-base] with RStudio [@RStudio] and employed the package *psych* [@R-psych].
 
 ```{r analysis.1, fig.align = 'center', fig.height = 3.25, fig.cap = 'Distributions of the examined variables. The left panel gives boxplots, the right panel gives QQ-plots of the squared Mahalanobis distances, plottet against the theoretical quantiles.', fig.pos = 'bt', out.extra = ''}
 # required functions
@@ -208,7 +257,6 @@ vio.plot <- function(df, ylim = NULL) {
   }
 }
 
-
 # set seed for reproducible results
 set.seed(1)
 
@@ -222,10 +270,10 @@ outliers = sort(sample(1:256, 4, replace = F))
 Y[outliers] = runif(4, 3.75, 4.25)
 Z[outliers] = runif(4, 3.75, 4.25)
 
-df=data.frame(X,Y,Z)
+df = data.frame(X, Y, Z)
 
 # get descriptives
-descriptives = describe(df)[,c(3:5, 13, 8:9, 11:12)] # drop some unnecessary output and rearrange cols
+descriptives = describe(df)[, c(3:5, 13, 8:9, 11:12)] # drop some unnecessary output and rearrange cols
 
 # add results from shapiro.tests
 descriptives$shapiro.p = sw(df)
@@ -285,21 +333,44 @@ if (any(descriptives$shapiro.p < .2) | mardia.df$p.skew < .2 | mardia.df$p.kurt 
   robust = F
 }
 
-cap.2=paste0('Results of the mediation analysis using ', regression, ' regression. Unstandardized coefficients are given and printed bold-faced if their 95% CI (based on bias-corrected and accelerated bootstrapping with 1000 permutations) does not inlcude zero.')
+cap.2 = paste0('Results of the mediation analysis using ', regression, ' regression. Unstandardized coefficients are given and printed bold-faced if their 95% CI (based on bias-corrected and accelerated bootstrapping with 1000 permutations) does not inlcude zero.')
 
 ```
 
 ## Customize the reporting of results in the body of the manuscript
 
-Here is an example text for a Results section: "Shapiro-Wilk tests for deviation from univariate normality showed that `r report.normal` `r which.normal` did not deviate from the normal distribution, $p>.2$, while `r report.nonnormal` `r which.nonnormal` deviated from the normal distribution, $p<.2$, see Table 1 for details. Furthermore, a Mardia test for multivariate normality indicated that there was `r report.mardia` deviation from the multivariate normal distribution, $p_{skew}$ `r apa.coef(mardia.df$p.skew, gt1 = F, digits = 3, pval = T)`, $p_{kurtosis}$ `r apa.coef(mardia.df$p.kurt, gt1 = F, digits = 3, pval = T)`. The left panel of Figure 1 gives the distribution of the examined variables including boxplots and possible univariate outliers, i.e., values above or below 1.5 interquartile ranges from the borders of the box. The right panel of Figure 1 gives the squared Mahalanobis distances per participant, plotted against the theoretical quantiles of the $\chi^2$ distribution with $df=3$. Multivariate outliers, i.e., Mahalanobis distances that under a $\chi^2$ distribution with $df=3$ have a probability of $p<.01$ are marked. Given the overall `r distribution` distribution of the data, we computed `r correlation` correlations and `r regression` regression to test our hypotheses."
+Here is an example text for a Results section: 
+"Shapiro-Wilk tests for deviation from univariate normality showed that `r report.normal` `r which.normal` did not deviate from the normal distribution, $p>.2$, while `r report.nonnormal` `r which.nonnormal` deviated from the normal distribution, $p<.2$, see Table 1 for details. 
+Furthermore, a Mardia test for multivariate normality indicated that there was `r report.mardia` deviation from the multivariate normal distribution, $p_{skew}$ `r apa.coef(mardia.df$p.skew, gt1 = F, digits = 3, pval = T)`, $p_{kurtosis}$ `r apa.coef(mardia.df$p.kurt, gt1 = F, digits = 3, pval = T)`. 
+The left panel of Figure 1 gives the distribution of the examined variables including boxplots and possible univariate outliers, i.e., values above or below 1.5 interquartile ranges from the borders of the box. 
+The right panel of Figure 1 gives the squared Mahalanobis distances per participant, plotted against the theoretical quantiles of the $\chi^2$ distribution with $df=3$. 
+Multivariate outliers, i.e., Mahalanobis distances that under a $\chi^2$ distribution with $df=3$ have a probability of $p<.01$ are marked. 
+Given the overall `r distribution` distribution of the data, we computed `r correlation` correlations and `r regression` regression to test our hypotheses."
 
-As you can see in the R Markdown source document, there are a number of placeholders in the text. Take a look at the source text for the first sentence of the Results and also at the R code chunk ahead of this paragraph (see under the comment # add results from shapiro.tests). Here, deviation from univariate normality is first determined, and then depending on which and how many variables deviate from the normal distribution, the text elements to insert in the Results section are defined. If only one variable is non-normally distributed, the text element _variable_ will appear; if there are two non-normally distributed variables, the text element will appear as _variables_. That means that you carefully have to consider what would be possible outcomes of different analysis steps that would affect your decision tree in what way and to generate text elements that reflect the nature of the outcomes as well as what follows from these outcomes with regard to your decision tree. In the present case, we considered that for the univariate case, there could be one or two normally or non-normally distributed variables (but in fact, the code above does not account for the possibility that all three variables were normally or non-normally distributed). We also considered that there could be a deviation or no deviation from multivariate normality. We finally define at the end of the code chunk how we proceed if there are univariate and/or multivariate deviations from normality. In our case, non-parametric/robust tests are performed if there is _any_ deviation, be it univariate or multivariate, but there are certainly reasons to make a different decision. Still, your decisions how to analyze your data are fixed in advance, and whatever the results look like, you are prepared and do not have to edit the reporting part of your manuscript, not even, when some reviewer requires that you delete the outliers. In this case, the report would dynamically change, and you would not have to edit all the tables by hand (which is always error-prone). 
+As you can see in the R Markdown source document, there are a number of placeholders in the text. 
+Take a look at the source text for the first sentence of the Results and also at the R code chunk ahead of this paragraph (see under the comment # add results from shapiro.tests). 
+Here, deviation from univariate normality is first determined, and then depending on which and how many variables deviate from the normal distribution, the text elements to insert in the Results section are defined. 
+If only one variable is non-normally distributed, the text element *variable* will appear; if there are two non-normally distributed variables, the text element will appear as *variable*. 
+That means that you carefully have to consider what would be possible outcomes of different analysis steps that would affect your decision tree in what way and to generate text elements that reflect the nature of the outcomes as well as what follows from these outcomes with regard to your decision tree. 
+In the present case, we considered that for the univariate case, there could be one or two normally or non-normally distributed variables (but in fact, the code above does not account for the possibility that all three variables were normally or non-normally distributed). 
+We also considered that there could be a deviation or no deviation from multivariate normality. 
+We finally define at the end of the code chunk how we proceed if there are univariate and/or multivariate deviations from normality. 
+In our case, non-parametric/robust tests are performed if there is *any* deviation, be it univariate or multivariate, but there are certainly reasons to make a different decision. 
+Still, your decisions how to analyze your data are fixed in advance, and whatever the results look like, you are prepared and do not have to edit the reporting part of your manuscript, not even, when some reviewer requires that you delete the outliers. In this case, the report would dynamically change, and you would not have to edit all the tables by hand (which is always error-prone). 
 
 # Format tables and figures as well as their legends
 
-We use the results of the descriptive statistics also to illustrate the next topic of this lesson: formatting tables and figures. Figure 1 above already gives an example, and some of its properties such as its height, alignment, and caption are set in header of the respective code chunk. In this case, $fig.height=3.25$ states the height of the figure in inches, $fig.pos='bt'$ will make LaTeX try to place the figure first at the bottom of a page, and if this seems not manageable, then to place it at the top of the page. Further options would be $'h'$ for placing the figure approximately at the location in the document where it occurs in the R Markdown document or $'p'$ for placing the figure on a new page. Other features are set during the plotting process itself. Please note that figures that look good when plotted in _RStudio_ may appear a bit bulky in the PDF output, so it may be a good idea to use values smaller than one for $cex.axis$ and $cex.lab$ (these are set to 0.8 in Figure 1). Also, you might want to consider the placement of the axes' elements via $mgp = c(2, .5, 0)$ in Figure 1 (default is $mgp = c(3, 1, 0)$ for axis label, tick labels and tick position). Also, the tick length is adjusted to $tck = -.03$. 
+We use the results of the descriptive statistics also to illustrate the next topic of this lesson: formatting tables and figures. 
+Figure 1 above already gives an example, and some of its properties such as its height, alignment, and caption are set in header of the respective code chunk. 
+In this case, $fig.height=3.25$ states the height of the figure in inches, $fig.pos='bt'$ will make LaTeX try to place the figure first at the bottom of a page, and if this seems not manageable, then to place it at the top of the page. 
+Further options would be $'h'$ for placing the figure approximately at the location in the document where it occurs in the R Markdown document or $'p'$ for placing the figure on a new page. 
+Other features are set during the plotting process itself. Please note that figures that look good when plotted in *RStudio* may appear a bit bulky in the PDF output, so it may be a good idea to use values smaller than one for $cex.axis$ and $cex.lab$ (these are set to 0.8 in Figure 1). 
+Also, you might want to consider the placement of the axes' elements via $mgp = c(2, .5, 0)$ in Figure 1 (default is $mgp = c(3, 1, 0)$ for axis label, tick labels and tick position). 
+Also, the tick length is adjusted to $tck = -.03$. 
 
-As for tables, the whole thing becomes a bit more tricky, as LaTeX is not known for its ease in generating tables. Still, in the context of dynamic, updatable documents, it is worthwhile to consider using R Markdown instead of Word, because -- as repeatedly underscored -- you neither will nor want to edit your manuscript by hand when you (may be forced to) modify your analysis pipeline. In this lesson, we will provide you with examples for very basic tables only, more complicated, but also more convenient table options will follow in subsequent lessons.
+As for tables, the whole thing becomes a bit more tricky, as LaTeX is not known for its ease in generating tables. 
+Still, in the context of dynamic, updatable documents, it is worthwhile to consider using R Markdown instead of Word, because -- as repeatedly underscored -- you do not want to edit your manuscript by hand when you (may be forced to) modify your analysis pipeline. 
+In this lesson, we will provide you with examples for very basic tables only, more complicated, but also more convenient table options will follow in subsequent lessons.
 
 ```{r analysis.2}
 # correlation analysis
@@ -330,7 +401,12 @@ ct = corr.test(df, method = tolower(correlation))
 \end{center}
 \end{table}
 
-In LaTeX, tables are usually generated like this (code in this knitted document invisible) and appear like the table below. Let us walk through the code: First a table environment is generated, and '[b!]' forces LaTeX to position the table at the bottom of the page. Then the table is centered, labeled for cross-referencing and given a caption (that states whether the correlations are Pearson or Spearman correlations, depending on the distribution of the variables of interest, see above and R code chunk _analysis.1_). Then, the actual table is generated with R chunks embedded that refer to previously computed coefficients to be provided in the table. A note to the table is inserted at the end.
+In LaTeX, tables are usually generated like this (code in this knitted document invisible) and appear like the table below.
+Let us walk through the code: 
+First a table environment is generated, and '[b!]' forces LaTeX to position the table at the bottom of the page. 
+Then the table is centered, labeled for cross-referencing and given a caption (that states whether the correlations are Pearson or Spearman correlations, depending on the distribution of the variables of interest, see above and R code chunk _analysis.1_). 
+Then, the actual table is generated with R chunks embedded that refer to previously computed coefficients to be provided in the table. 
+A note to the table is inserted at the end.
 
 
 ```{r analysis.3, message=F, fig.height=5, fig.cap=cap.2}
@@ -403,8 +479,8 @@ boot.med.rob <- function(iv, dv, med, replicates = 1000, robust = T) {
 bm = boot.med.rob(iv = X, dv = Y, med = Z, robust = robust)
 
 # plot mediation paths
-par(mfrow=c(2,1), mar=c(1.5,3.8,.5,1))
-plot(c(0:21),seq(2,6.2,.2),type="n",axes=F,xlab="",ylab="")
+par(mfrow = c(2, 1), mar = c(1.5, 3.8, .5, 1))
+plot(c(0:21), seq(2, 6.2, .2), type = "n", axe = F, xlab = "", ylab = "")
 
 rect( 0, 2,  7, 3)
 rect(14, 2, 21, 3)
@@ -440,7 +516,11 @@ par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
 
 ```
 
-Figure 2 gives the results of the mediation analyses. Because no figure position was defined in the code chunk, it was printed where the figure best fitted given the position of the R code chunk (you may want to play around to have the figure positioned on top or the bottom of this page). We could now go on and provide the results of the mediation analysis in the main text such as: "The indirect path was `r bm$sig.string[which(rownames(bm) == 'ab')]`, $b=$ `r apa.coef(bm$original[which(rownames(bm) == 'ab')], gt1 = T, digits = 3)`, 95% CI [`r apa.coef(bm$CI.lo[which(rownames(bm) == 'ab')], gt1 = T, digits = 3)`, `r apa.coef(bm$CI.hi[which(rownames(bm) == 'ab')], gt1 = T, digits = 3)`]." Yet, we will skip any further reporting of results because we think that the main message is clear with this example. 
+Figure 2 gives the results of the mediation analyses. 
+Because no figure position was defined in the code chunk, it was printed where the figure best fitted given the position of the R code chunk (you may want to play around to have the figure positioned on top or the bottom of this page). 
+We could now go on and provide the results of the mediation analysis in the main text such as: 
+"The indirect path was `r bm$sig.string[which(rownames(bm) == 'ab')]`, $b=$ `r apa.coef(bm$original[which(rownames(bm) == 'ab')], gt1 = T, digits = 3)`, 95% CI [`r apa.coef(bm$CI.lo[which(rownames(bm) == 'ab')], gt1 = T, digits = 3)`, `r apa.coef(bm$CI.hi[which(rownames(bm) == 'ab')], gt1 = T, digits = 3)`]." 
+Yet, we will skip any further reporting of results because we think that the main message is clear with this example. 
 
 # Interim Summary
 
