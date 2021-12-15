@@ -6,11 +6,9 @@ output: pdf_document
 
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 library(knitr)
 knitr::opts_chunk$set(echo = F)
-
-
 ```
 
 ## Preliminary Notes
@@ -25,11 +23,11 @@ This can be at least partially solved with the help of GitHub.
 Since there is a multitude of implementation possibilities, this tutorial does not claim to be exhaustive.
 All information listed here have been drawn and prepared from various documentations and tutorials, for example:
 
-* https://happygitwithr.com/index.html
-* https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN
-* https://resources.github.com/whitepapers/github-and-rstudio/
-* https://static1.squarespace.com/static/5757268f7da24f26ca7b21d2/t/5c7587114192021796d7cc84/1551206162093/R_Overleaf_Integration.pdf
-* A Reproducible Data Analysis Workflow with R Markdown, Git, Make, and Docker, https://psyarxiv.com/8xzqy/
+- https://happygitwithr.com/index.html
+- https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN
+- https://resources.github.com/whitepapers/github-and-rstudio/
+- https://static1.squarespace.com/static/5757268f7da24f26ca7b21d2/t/5c7587114192021796d7cc84/1551206162093/R_Overleaf_Integration.pdf
+- A Reproducible Data Analysis Workflow with R Markdown, Git, Make, and Docker, https://psyarxiv.com/8xzqy/
 
 First, you will make all the necessary preparations in RStudio and GitHub. 
 Then you will learn how to work collaboratively on scripts and texts. 
@@ -57,16 +55,17 @@ Now that Git is installed, you need to link it to RStudio.
 Open RStudio and go to \textsc{Tools -> Global Options}. 
 Navigate to \textsc{Git/SVN}, check \textsc{Enable version control interface for RStudio projects} and paste the path to your Git executable in the corresponding field and klick \textsc{OK}.
 
-```{r img1, echo=FALSE, fig.cap="", fig.align="center", out.width = '75%'}
+```{r img1, echo = FALSE, fig.cap = "", fig.align = "center", out.width = "75%"}
 knitr::include_graphics("images/Integrate_Git.png")
 ``` 
 
 Now everything is set up and you can start a new project!
 
 \newpage
+
 # Projects in Git and R
 
-### Create new projects
+## Create new projects
 
 First you need to set up a new repository on GitHub. 
 Sign in on GitHub, go to the \textsc{+} in the top right corner and klick on \textsc{New repository}. 
@@ -77,13 +76,13 @@ Klick on \textsc{Create Repository} and you are good to go!
 Make note of the GitHub address for you repository. Klick on \textsc{Code} and now on the Notepad symbole next to the HTTPS address. 
 The address to our repository is now stored in the clipboard. 
 
-```{r img2, echo=FALSE, fig.cap="", fig.pos="h", fig.align="center", out.width = '30%'}
+```{r img2, echo = FALSE, fig.cap = "", fig.pos = "h", fig.align = "center", out.width = "30%"}
 knitr::include_graphics("images/save_address.png")
 ``` 
 
-### Integrate projects in RStudio
+## Integrate projects in RStudio
 
-Open RStudio an click on \textsc{File -> New Project}. <!-- commend in RMarkdown-->
+Open RStudio an click on \textsc{File -> New Project}. <!-- comment in RMarkdown-->
 Select the option \textsc{Version Control -> Git}.  
 Now paste the address of your Git repository in the first line. 
 A new folder with the exact name of your Git repository will be created as subdirectory. 
@@ -101,10 +100,13 @@ Click on the  \textsc{Version Control button} in the control panel and select \t
 ```{r img3, echo=FALSE, fig.cap="", fig.pos="h", fig.align="center", out.width = '50%'}
 knitr::include_graphics("images/committing.png")
 ```
+
 \newpage
+
 A new window opens were you can review all changes made. 
 Add a comment explaining briefly all changes you made since the last commit and click on \textsc{Commit}.  
-```{r img4, echo=FALSE, fig.cap="", fig.pos="h", fig.align="center", out.width = '50%'}
+
+```{r img4, echo = FALSE, fig.cap = "", fig.pos = "h", fig.align = "center", out.width = "50%"}
 knitr::include_graphics("images/commit_edit.png")
 ```
 All committed files should now disappear in the _Git_ tap. 
@@ -115,12 +117,14 @@ Further, once you committed all your changes, you can _pull_ the latest version 
 After you finished _pulling_ you can _push_ your changes to the Git repository (i.e. upload your changes). 
 _Pulling_ and _pushing_ ist the essential feature for collaborative work! So make shure you and your collaborators always work with up to date files.  
 \textsc{Note}: The sequence of buttons on the RStudio git panel (that you can see in the picture) matches the sequence of actions necessary to submit changes to Git repository.
-```{r img5, echo=FALSE, fig.cap="", fig.pos="h", fig.align="center", out.width = '100%'}
+
+```{r img5, echo = FALSE, fig.cap = "", fig.pos = "h", fig.align = "center", out.width = "100%"}
 knitr::include_graphics("images/pull.png")
 ```
 
 \newpage
-# Collaborative writing with RMarkdown scripts
+
+# Collaborative writing with R Markdown scripts
 
 In this section I want to show you one way how collaborative writing works with your reproducible manuscripts.
 
@@ -148,7 +152,7 @@ Author A can see all changes and comments in the commit log.
 ## Tips and tricks
 Lastly here are some tips and tricks that that can facilitate collaborative writing:
 
-1. In your RMarkdown file, use a new line for each sentence (as you can see in this _.Rmd_ document). 
+1. In your R Markdown file, use a new line for each sentence (as you can see in this _.Rmd_ document). 
 Otherwise, GitHub will mark the whole paragraph although a co-worker only changed one sentence, because all sentences were in the same line.
 2. Work with small commits! For every change or comment you make, commit the change. 
 If you do all your changes and pull the whole file at the end, it gets very chaotic.
