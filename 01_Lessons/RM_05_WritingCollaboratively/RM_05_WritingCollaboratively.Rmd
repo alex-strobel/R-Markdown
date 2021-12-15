@@ -28,8 +28,6 @@ All information listed here have been drawn and prepared from various documentat
 First, you will make all the necessary preparations in RStudio and GitHub. 
 Then you will learn how to work collaboratively on scripts and texts. 
 
-\newpage
-
 # Set up Git and RStudio
 
 ## GitHub and Git
@@ -57,8 +55,6 @@ knitr::include_graphics("images/Integrate_Git.png")
 ``` 
 
 Now everything is set up and you can start a new project!
-
-\newpage
 
 # Projects in Git and R
 
@@ -90,15 +86,13 @@ Now your R project is linked to the Git repository and you can start working.
 
 ## Committing
 
-You can create and edit files in RStudio, as you are used to. 
+You can create and edit files in RStudio as you are used to. 
 For example you could open and edit the README file, you created in the Git repository. Now you have to commit changes to the Git repository. 
 Click on the `Version Control` button in the control panel and select `Commit`. 
 
 ```{r img3, echo=FALSE, fig.cap="", fig.pos="h", fig.align="center", out.width = '50%'}
 knitr::include_graphics("images/committing.png")
 ```
-
-\newpage
 
 A new window opens were you can review all changes made. 
 Add a comment explaining briefly all changes you made since the last commit and click on \textsc{Commit}.  
@@ -108,22 +102,29 @@ knitr::include_graphics("images/commit_edit.png")
 ```
 All committed files should now disappear in the _Git_ tab. 
 
+## If all this doesn't work ...
+
+... because you get an error that a *personal access token* is required, go get one following [this tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) or proceed as described here:
+
+- [GitHub and the `renv` package](https://github.com/alex-strobel/DPP-LabManual/blob/main/Manuals/GitHub_and_renv/GitHub_and_renv_short.md)
+
+We really recommend to use the [`renv` package](https://github.com/alex-strobel/DPP-LabManual/wiki/R-package-renv) for collaborative work on R projects because all collaborators will use the same R environment, even when having installed different versions of certain packages employed.
+
 ## Pushing and Pulling
+
 If you start working with your project, you should always _pull_ the latest version from your Git repository from GitHub. 
 Further, once you committed all your changes, you can _pull_ the latest version of the Git repository from GitHub. 
-After you finished _pulling_ you can _push_ your changes to the Git repository (i.e. upload your changes). 
-_Pulling_ and _pushing_ ist the essential feature for collaborative work! So make shure you and your collaborators always work with up to date files.  
-\textsc{Note}: The sequence of buttons on the RStudio git panel (that you can see in the picture) matches the sequence of actions necessary to submit changes to Git repository.
+After you finished _pulling_ you can _push_ your changes to the Git repository (i.e., upload your changes). 
+_Pulling_ and _pushing_ is the essential feature for collaborative work! So make sure you and your collaborators always work with up to date files.  
+*Note*}*: The sequence of buttons on the RStudio git panel (that you can see in the picture) matches the sequence of actions necessary to submit changes to Git repository.
 
 ```{r img5, echo = FALSE, fig.cap = "", fig.pos = "h", fig.align = "center", out.width = "100%"}
 knitr::include_graphics("images/pull.png")
 ```
 
-\newpage
-
 # Collaborative writing with R Markdown scripts
 
-In this section I want to show you one way how collaborative writing works with your reproducible manuscripts.
+In this section we want to show you one way how collaborative writing works with your reproducible manuscripts.
 
 ## Branching
 
@@ -149,11 +150,17 @@ Author A can see all changes and comments in the commit log.
 ## Tips and tricks
 Lastly here are some tips and tricks that that can facilitate collaborative writing:
 
-1. In your R Markdown file, use a new line for each sentence (as you can see in this _.Rmd_ document). 
+1. In your R Markdown file, use a new line for each sentence (as you can see in this *.Rmd* document). 
 Otherwise, GitHub will mark the whole paragraph although a co-worker only changed one sentence, because all sentences were in the same line.
 2. Work with small commits! For every change or comment you make, commit the change. 
 If you do all your changes and pull the whole file at the end, it gets very chaotic.
-3. Everything gets a lot easier if you split you manuscript in several _.Rmd_ files. 
-I would recommend using an own _.Rmd_ file for each section.
+3. Everything gets a lot easier if you split you manuscript in several *.Rmd* files. 
+We recommend using an own *.Rmd* file for each section and put them together in a master document via, e.g.,
 
+```{r child = "Part1.Rmd"}
+```
 
+```{r child = "Part2.Rmd"}
+```
+
+Yet, we still have to find out whether this works with the *papaja* package.
