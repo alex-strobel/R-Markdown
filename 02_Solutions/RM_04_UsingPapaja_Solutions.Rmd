@@ -1,0 +1,168 @@
+---
+title             : "R Markdown Lesson 04: Using Papaja"
+shorttitle        : "Using Papaja"
+
+author: 
+  - name          : "Alexander Strobel"
+    affiliation   : "1"
+    corresponding : yes
+    address       : "Faculty of Psychology, Technische Universität Dresden, 01062 Dresden, Germany"
+    email         : "alexander.strobel@tu-dresden.de"
+  - name          : "Christoph Scheffel"
+    affiliation   : "1"
+
+affiliation:
+  - id            : "1"
+    institution   : "Technische Universität Dresden"
+
+authornote: |
+  Alexander Strobel, Christoph Scheffel, Faculty of Psychology, Technische Universität Dresden, 01062 Dresden, Germany; 
+  This work was supported by SFB 940/2. 
+
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  
+  One or two sentences to put the results into a more **general context**.
+  
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+# required packages
+library(papaja) # for formatting in APA style 
+library(psych)  # for correlation analysis
+
+# add references for these packages to BibTeX file
+r_refs("r-references.bib")
+
+# required function
+
+# function for generating random correlated variables
+randcorr <- function(rho, nobs, nvars, precision = 0, matrix.found = F) {
+
+  # This function returns a matrix of N rows (equaling the number of nobs) by P colums
+  # (equaling the number of nvars) that fulfil the requirement to be correlated as
+  # specified by the numeric value or matrix rho. If rho is a numeric value, all
+  # variables will correlate with r = rho. If rho is a symmetric correlation matrix
+  # (with 1 in the diagonal), the intercorrelations of the variables generated will
+  # reproduce rho to a precison of 0 (default) as a rough approximation using only one
+  # generation cycle or 1 (approxiation to .x), 2 (.xx), and so on (with increasing, but
+  # generally negligible time to find a respective solution). The number of cycles needed
+  # to find a matrix fulfilling the requirements is returned via matrix.found=T.
+  
+  compare <- function(x, y, prec = 2) {
+    X = round(x, prec)
+    Y = round(y, prec)
+    return(X == Y)
+  }
+  
+  if (dim(as.data.frame(rho))[1] == 1) {
+    C = matrix(rho, nvars, nvars)
+    
+    for (i in 1:nvars) {
+      C[i, i] = 1
+    }
+  } else {
+    C = rho
+  }
+  
+  A = chol(C)
+
+  i = 1;
+  
+  if (precision == 0) {
+    W = rnorm(nobs * nvars, 0, 1)
+    dim(W) = c(nobs, nvars)
+    y = W %*% A
+  } else {
+    k = 1
+    
+    while (k == 1) {
+      W = rnorm(nobs * nvars, 0, 1)
+      dim(W) = c(nobs, nvars)
+      y = W %*% A
+      D = cor(y)
+      
+      c = compare(round(C, precision), round(D, precision), prec = precision)
+      if (all(c) == T) {
+        k = 0
+      }
+      i = i + 1
+    }
+  }
+  if (matrix.found == T) {
+    print(paste("matrix found in ", i, " steps.", sep = ""))
+  }
+  
+  return(data.frame(y))
+  
+}
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(242)
+```
+
+Your tasks to exercise what you have learned in the lesson on using the *papaja* package were to 
+
+1. Report the results of a correlation analysis involving variables X1 and X2 in data.frame `df` using `apa_print` with the `cor.test` function.
+2. Format a correlation table in a way that prints significant correlations bold-faced.
+3. Save Figure 2 in Tagged Image File Format (tiff, another figure format commonly accepted at scientific journals) with 300 dpi resolution.
+
+# First exercise
+
+```{r data, echo = F}
+# generate random correlated variables X1 to X5
+df = randcorr(.3, 256, 5)
+
+# at random age and gender
+df$age = round(rnorm(256, mean = 22, sd = 1))
+df$gender = round(runif(256, 0, 1))
+```
+
+We first need to reinstate the respective data. To report the results of a correlation analysis involving variables X1 and X2, we simply write: 
+
+A correlation analysis of variables X1 and X2 revealed a correlation of `r apa_print(cor.test(df$X1, df$X2))$full_result`.
+
+## Second exercise
+
+Your task was to format a correlation table in a way that prints significant correlations bold-faced. The first question is what *significant* means. If you had a clear hypothesis on all the correlations analyzed, you would set $|alpha$ to .05. As it is very likely that you had not, you need to correct for multiple testing. Bonferroni-correction would be an option, but most of the time, it is a too conservative correction. The `psych` package per default uses the *Holm* correction (see `?corr.test` for details). Using the `corr.test` function of the *psych* package will provide you with the *Holm*-corrected $p$-values. You use these values to format the results of your correlation analysis in a way that R Markdown "understands".
+
+```{r correlation, echo = F}
+correlation_analysis = corr.test(df[, 1:5])
+
+
+```
+
+## Third exercise
+
+Save Figure 2 in Tagged Image File Format (tiff, another figure format commonly accepted at scientific journals) with 300 dpi resolution.
+

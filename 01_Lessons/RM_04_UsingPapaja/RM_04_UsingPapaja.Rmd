@@ -60,7 +60,6 @@ library(car)    # for ANOVA
 library(papaja) # for formatting in APA style 
 library(psych)  # for correlation analysis
 library(pwr)    # for power calculation
-library(lavaan) # for mediation analysis
 
 # add references for these packages to BibTeX file
 r_refs("r-references.bib")
