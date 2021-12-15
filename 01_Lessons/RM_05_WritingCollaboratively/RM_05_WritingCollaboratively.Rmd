@@ -148,14 +148,15 @@ Author A can see all changes and comments in the commit log.
 5. Author A implements edits and responds to comments. 
 
 ## Tips and tricks
-Lastly here are some tips and tricks that that can facilitate collaborative writing:
+
+Finally, here are some tips and tricks that that can facilitate collaborative writing:
 
 1. In your R Markdown file, use a new line for each sentence (as you can see in this *.Rmd* document). 
 Otherwise, GitHub will mark the whole paragraph although a co-worker only changed one sentence, because all sentences were in the same line.
 2. Work with small commits! For every change or comment you make, commit the change. 
 If you do all your changes and pull the whole file at the end, it gets very chaotic.
 3. Everything gets a lot easier if you split you manuscript in several *.Rmd* files. 
-We recommend using an own *.Rmd* file for each section and put them together in a master document via, e.g.,
+We recommend using an own *.Rmd* file for each section and put them together in a master document (note: we still have to find out whether this works with the *papaja* package) via, e.g.,
 
 ```{r child = "Part1.Rmd"}
 ```
@@ -163,4 +164,6 @@ We recommend using an own *.Rmd* file for each section and put them together in 
 ```{r child = "Part2.Rmd"}
 ```
 
-Yet, we still have to find out whether this works with the *papaja* package.
+## Closing remarks
+
+So, this is it! This is the way how we at the Differential and Personality Group at the Faculty of Psychology at the TU Dresden write our manuscripts and organize our collaborative writing. More likely than not you will get a lot of error messages when trying to implement our work flow in your routines. Just view this as part of the execise ... 

@@ -1,6 +1,7 @@
 ---
 title: "R Markdown Lesson 02: Moving forward"
 author: "Alexander Strobel & Christoph Scheffel"
+date: "December, 2021"
 output: 
   pdf_document:
     keep_tex: true

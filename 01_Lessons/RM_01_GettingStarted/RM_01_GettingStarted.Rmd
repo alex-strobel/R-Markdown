@@ -1,6 +1,7 @@
 ---
 title: "R Markdown Lesson 01: Getting started"
-author: "Alexander Strobel"
+author: "Alexander Strobel and Christoph Scheffel"
+date: "December, 2021"
 output: pdf_document
 ---
 
@@ -12,8 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is an R Markdown document. 
 Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. 
-In the following, I will briefly give a general outline of R Markdown, which is an easy to learn language for creating updatable and reproducible reports. 
-<!-- You may ask why I place every sentence on a new line. You will learn in lesson five that this makes collaborative work on R Markdown documents using GitHUb much easier, and still, all text of a paragraph is displayed correctly in the final document. And by the way, you now also have learned how to insert a comment into an R Markdown document -->
+In the following, we will briefly give a general outline of R Markdown, which is an easy to learn language for creating updatable and reproducible reports. 
+<!-- You may ask why we place every sentence on a new line. You will learn in lesson five that this makes collaborative work on R Markdown documents using GitHUb much easier, and still, all text of a paragraph is displayed correctly in the final document. And by the way, you now also have learned how to insert a comment into an R Markdown document -->
 In RStudio (RStudio Team, 2016), you first create a new file of format R Markdown, define some document-specific issues such as the title, author or the output format in the so-called YAML header, and then simply start writing! 
 Formatting is quite straightforward. 
 Some examples for formatting text are:
@@ -42,8 +43,8 @@ Some examples for formatting text are:
 
 You may have noticed two things in the code that generated the above examples. 
 First, all lines start with an "\> ". 
-I did this because I wanted the examples to be indented. 
-Second, for the last three lines, I embedded the results in a double \$ which results in the text being interpreted as LaTeX text, hence, it will be formatted that way. 
+We did this because we wanted the examples to be indented. 
+Second, for the last three lines, we embedded the results in a double \$ which results in the text being interpreted as LaTeX text, hence, it will be formatted that way. 
 When you click the *Knit* button, a document will be generated that includes both the written content and the output of any embedded so-called R code chunks within the document. 
 You can embed an R code chunk like this:
 
@@ -54,8 +55,8 @@ y = 0.2 * x + rnorm(100)  # generate random variable y with 100 obs. that covari
 cor(x, y)                 # get Pearson correlation
 ```
 
-In this example, to have the same set of random variables and the same correlation returned each time, I set a custom seed, which is particularly important for arriving at reproducible results when doing simulations or bootstrapping. 
-Here, I set the seed to 242, my favorite number (after all powers of two), but the number actually does not matter as long as it is always the same for the same analysis[^1]. 
+In this example, to have the same set of random variables and the same correlation returned each time, we set a custom seed, which is particularly important for arriving at reproducible results when doing simulations or bootstrapping. 
+Here, we set the seed to 242, the favorite number (after all powers of two) of author AS, but the number actually does not matter as long as it is always the same for the same analysis[^1]. 
 Unless for demonstration purposes, you will usually not want to have the output of the code chunk shown as above just as it would appear on the console. 
 In this case, set echo = F at the beginning of the code chunk. 
 Still, you will have access to the output of the code chunk, as shown here for a correlation analysis.
