@@ -180,7 +180,7 @@ This enables you to write large parts of your Results section without resorting 
 ## Material
 
 In this subsection, you describe your material, e.g., questionnaires or stimuli used. 
-Often enough, this will be material that you already described in earlier manuscript, and more likely than not it took you some time to arrive the perfect description of your material back then. 
+Often enough, this will be material that you already described in an earlier manuscript, and more likely than not it took you some time to arrive the perfect description of your material back then. 
 While it is generally accepted that authors should omit self-plagiarism, an optimal description of a material or aprocedure---at least in our opinion---can and indeed *should* be reused. 
 Would Pythagoras have paraphrased his theorem $a^2 + b^2 = c^2$ in later writings as "if you square $a$ and add the square of $b$, this equals the square of $c$" or "the sum of squares of $x$ and $y$ gives the square of $z$"? 
 So, you may save your standard material description in a separate R Markdown file and include it in your main manuscript as a so-called *child*.
