@@ -1,0 +1,46 @@
+---
+title: "MGK OS WS 3 - Rmd practice"
+author: "Christoph Scheffel"
+date: 'July, 2022'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Rmarkdown practice
+
+In the following part, you will work on three tasks to gain a first insight into formatting text with Rmarkdown.
+
+
+```{r variables}
+set.seed(123)             # set custom seed for reproducible results
+x = rnorm(100)            # generate random variable x with 100 obs.
+y = 0.2 * x + rnorm(100)  # generate second random variable y with 100 obs. that covaries with x
+z = 0.3 * x + rnorm(100)  # generate third random variable z with 100 obs. that also covaries with x
+```
+
+
+Tasks:
+
+1. Format all statistical characters and equations correctly in the following text.
+
+2. Calculate a regression model in the r chunk "regression" using the generated random variables x, y, and z.
+
+3. Write a short paragraph on the results of the linear regression model and report all necessary statistical values.
+
+
+In the r chunk "variables" in this document, three random variables were generated. 
+Each variable has 100 observations.
+The variables were created so that the variables y and z covary with x.
+In the next r chunk, chunk "regression", a simple linear regression model is calculated.
+The formula describing the model is x ~ y + z.
+
+
+```{r regression}
+# compute regression model
+model <- lm(x ~ y + z)
+summary(model)
+```
+
