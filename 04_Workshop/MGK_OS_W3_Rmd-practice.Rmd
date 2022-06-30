@@ -49,5 +49,6 @@ Report the results in the text body of the document including beta-weights and m
 
 ```
 
-Finally, change the factors by which y and z are multiplied by x in the chunk "variables".
-Knit the document and compare the results in the ew output file with the previous ones.
+Finally, save the PDF output generated previously under a new name.
+Then change the factors by which y and z are multiplied by x in the chunk "variables".
+Knit the document and compare the results in the new output file with the previous ones.
