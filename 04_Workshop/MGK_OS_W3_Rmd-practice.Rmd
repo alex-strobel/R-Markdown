@@ -1,6 +1,6 @@
 ---
 title: "MGK OS WS 3 - Rmd practice"
-author: "Christoph Scheffel"
+author: "Alexander Strobel and Christoph Scheffel"
 date: 'July, 2022'
 output: pdf_document
 editor_options: 
