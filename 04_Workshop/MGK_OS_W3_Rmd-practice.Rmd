@@ -14,8 +14,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Rmarkdown practice
 
-In the following part, you will work on four short tasks to gain a first insight into formatting text with Rmarkdown.
-Your first task is to format the text in this document so that all statistical characters and equations are displayed correctly.
+In the following part, you will work on four short tasks to gain a first insight into formatting text with R Markdown.
+Your first task is to format the text in this document so that all statistical coefficients are displayed correctly.
+That means, that (according to APA standard) statistical parameters are displayed in italics, are presented without leading zeroes if the respective coefficents cannot be greater than one, are given with two decimal digits except for $p$-values that are given with three decimal digits.
+As a help, please note that LaTeX enables one to provide greek symbols like this:
+The significance level was set to $\alpha=.05$.
 If you take a look in the .Rmd file, you can see three R chunks.
 In the first chunk called "variables", three random variables were generated.
 Each variable has 100 observations.
