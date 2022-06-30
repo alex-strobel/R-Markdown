@@ -66,5 +66,5 @@ Report the results in the text body of the document including beta-weights, t- a
 Finally, save the PDF output generated previously under a new name.
 Then change the factors by which y and z are multiplied by x in the chunk "variables".
 Knit the document and compare the results in the new output file with the previous ones.
-If the resulting p-values are smaller than .001, the apa.coef() function as provided will produce a proper output.
+If the resulting p-values are smaller than .001, the apa.coef() function as provided will no longer produce a proper output.
 If time allows, you may want to edit it so that it retrieves p < .001 in such a case.
