@@ -72,8 +72,11 @@ If time allows, you may want to edit it so that it retrieves p < .001 in such a 
 ## Additional task
 
 If time allows, you may want to provide scatterplots of x and y as well as of x and z. 
-You may try one of the following difficulty levels:
+You may try one or more of the following difficulty levels:
 
-- simply provide two separate figures with the scatterplot of x and y and x and z
-- provide a two panel plot denoted as A and B in the upper left corner of the plot
-- provide the plot(s) exactly at a given location of the page via the  
+- simply provide two separate figures with the scatterplot of x and y and x and z, each with a figure caption
+- provide a two panel plot denoted as A and B in the upper left corner of the plot together with one figure cation
+- provide correlation of the variables in the lower right corner of the plot as (italic) r = .xx
+- provide regression lines in the plots via abline(lm(...))
+- provide confidence intervals of the regression line via predict(lm())
+
