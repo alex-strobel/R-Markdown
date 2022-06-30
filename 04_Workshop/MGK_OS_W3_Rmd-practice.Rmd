@@ -12,7 +12,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# R Markdown practice
+## R Markdown practice
 
 In the following part, you will work on a few short tasks to gain a first insight into formatting text with R Markdown.
 Your first task is to format the text in this document so that all statistical coefficients are displayed correctly.
@@ -68,3 +68,12 @@ Then change the factors by which y and z are multiplied by x in the chunk "varia
 Knit the document and compare the results in the new output file with the previous ones.
 If the resulting p-values are smaller than .001, the apa.coef() function as provided will no longer produce a proper output.
 If time allows, you may want to edit it so that it retrieves p < .001 in such a case.
+
+## Additional task
+
+If time allows, you may want to provide scatterplots of x and y as well as of x and z. 
+You may try one of the following difficulty levels:
+
+- simply provide two separate figures with the scatterplot of x and y and x and z
+- provide a two panel plot denoted as A and B in the upper left corner of the plot
+- provide the plot(s) exactly at a given location of the page via the  
