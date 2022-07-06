@@ -10,10 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Results
+
 ```{r correlation, echo = F}
-set.seed(242)
-X = rnorm(64)
-Y = .5 * X + rnorm(64)
 cor_XY = cor.test(X, Y)
 if (cor_XY$p.value < .05) {
   hypo = "As hypothesized,"
