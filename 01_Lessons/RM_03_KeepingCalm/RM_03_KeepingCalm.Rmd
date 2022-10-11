@@ -117,7 +117,7 @@ As you alredy learned, RMarkdown uses LaTeX for formatting.
 Usually, LaTeX uses BibTex as citation format (but apparently, you can also use [CSL-JSON](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html), if you are familiar with that option). 
 To ensure that everything works properly, make sure that you stated the name of the BibTeX file (via bibliography:) as well as the Citation Style Language (via csl:) in the YAML header (see top of the R Markdown document). 
 
-You can fetch BibTeX formatted references from the web using, e.g., JabRef (https://www.jabref.org/) or import them from Endnote via the BibTeX Export output style that can be downloaded from the Endnote web site und the following URL: https://endnote.com/style_download/bibtex-export/. 
+You can fetch BibTeX formatted references from the web using, e.g., JabRef (https://www.jabref.org/) or import them from Endnote via the BibTeX Export output style that can be downloaded from the Endnote web site at the following URL: https://endnote.com/style_download/bibtex-export/. 
 Double-click it, which should load it into Endnote, and then (under Edit) set it as Output Citation Style. 
 Then export your Endnote file via `File > Export` to the desired location (please note that if you want to keep the old name and save the BibTex file to the same folder as the original file this might not work. Therefore, choose another filename or folder). For other citation managers, there are surely also options to get BibTex formatted entries. 
 For Zotero, *papaja* (more on this package in the next lesson) offers a special function called fetch_zotero_refs that we have not tried yet.
