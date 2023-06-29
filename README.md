@@ -39,7 +39,7 @@ Then clone this repository from the RStudio console via the following command:
 
 The above commands will only work if you have `git` installed on your system.
 If not, simply download this repository via clicking on the green `Code` button at the top of this page and select **Download ZIP**.
-In any case, open activateCourse.R in RStudio and follow the instructions (please note that to setup your environment may take a few minutes).
+In any case, open `activateCourse.R` in RStudio and follow the instructions (please note that to setup your environment may take a few minutes).
 Then open 01_Lessons/RM_01_GettingStarted.Rmd for ... ahm ... getting started!
 
 ## Required software
